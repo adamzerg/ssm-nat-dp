@@ -1,17 +1,19 @@
 
 library(lubridate)
-library(flux)
 library(readxl)
-library(reshape)
 library(tidyverse)
 library(gridExtra)
-library(ggmap)
+# library(flux)
+# library(reshape)
+# library(ggmap)
 library(plotly)
 library(GGally)
 
 now <- Sys.time()
 now
 
+targetTime <- as.POSIXct("2022-06-19 15:23", "Asia/Taipei")
+# targetTimeRound <- 
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv("data/location-master/location-master-20220619.csv")
@@ -48,7 +50,6 @@ scrp$HourNumber <-
 str(scrp)
 
 
-
 station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>%
   summarise(
     DeskCount.mean = mean(DeskCount, na.rm = TRUE),
@@ -67,15 +68,14 @@ station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>
 
 
 ### Complete for the missing DateTimeRound
-
-unique(station$DateTimeRound)
+# unique(station$DateTimeRound)
 
 station <- station %>%
   complete(nesting(Location,序號,類別),
-           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 12:00"),
-                                      # as.POSIXct("2022-06-19 12:30"),
-                                      # as.POSIXct("2022-06-19 13:00"),
-                                      as.POSIXct("2022-06-19 13:30"),
+           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 12:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 12:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 13:00", "Asia/Taipei"),
+                                      as.POSIXct("2022-06-19 13:30", "Asia/Taipei"),
                                       by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -88,29 +88,30 @@ station <- station %>%
          AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup() %>%
   complete(nesting(Location,序號,類別),
-           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 17:00"),
-                                      # as.POSIXct("2022-06-19 17:30"),
-                                      # as.POSIXct("2022-06-19 18:00"),
-                                      # as.POSIXct("2022-06-19 18:30"),
-                                      # as.POSIXct("2022-06-19 21:00"),
-                                      # as.POSIXct("2022-06-19 21:30"),
-                                      # as.POSIXct("2022-06-19 22:00"),
-                                      # as.POSIXct("2022-06-19 22:30"),
-                                      # as.POSIXct("2022-06-19 23:00"),
-                                      # as.POSIXct("2022-06-19 23:30"),
-                                      # as.POSIXct("2022-06-20 01:00"),
-                                      # as.POSIXct("2022-06-20 08:30"),
-                                      # as.POSIXct("2022-06-20 09:00"),
-                                      # as.POSIXct("2022-06-20 09:30"),
-                                      # as.POSIXct("2022-06-20 10:00"),
-                                      # as.POSIXct("2022-06-20 10:30"),
-                                      # as.POSIXct("2022-06-20 11:00"),
-                                      # as.POSIXct("2022-06-20 11:30"),
-                                      # as.POSIXct("2022-06-20 12:00"),
-                                      # as.POSIXct("2022-06-20 13:00"),
-                                      # as.POSIXct("2022-06-20 14:30"),
-                                      # as.POSIXct("2022-06-20 15:00"),
-                                      as.POSIXct("2022-06-20 21:00"),
+           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 17:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 17:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 18:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 18:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 21:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 21:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 22:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 22:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 23:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-19 23:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 01:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 08:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 09:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 09:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 10:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 10:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 11:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 11:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 12:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 13:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 14:30", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 15:00", "Asia/Taipei"),
+                                      # as.POSIXct("2022-06-20 21:00", "Asia/Taipei"),
+                                      as.POSIXct("2022-06-21 10:30", "Asia/Taipei"),
                                       by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -123,13 +124,11 @@ station <- station %>%
          AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup()
 
-#filter(station, DateTimeRound == "2022-06-19 12:00")
-
+## Inspect filled data via the complete process
+# filter(station, DateTimeRound == "2022-06-19 12:00")
 
 # Supply for Location Master data
 set1 <- merge(station, locMaster)
-set1
-
 
 
 
@@ -189,22 +188,13 @@ booking <- pdf %>%
   )
 str(booking)
 
-
-## filter away C type stations
-# pdf <- pdf %>% filter((Location %in% c("鏡湖醫院","南粵青茂口岸","科大體育館", "鏡湖醫院禮堂")))
-
-## Note below location shows up in excel source but not in real time source hence filter away after merged
-# B29 鏡湖醫院禮堂
-# B30 科大體育館
-# B31 南粵青茂口岸
-# C04 鏡湖醫院* This one appears stayed as found also in LonLat
-
+# Supply for Location Master data
 set2 <- merge(booking, locMaster)
 str(set2)
 
 
 
-mdf <- merge(booking, station, by = c("Location","DateTimeRound","HourNumber"))
+mdf <- merge(booking, station, by = c("Location", "DateTimeRound","HourNumber")) #, all.x=TRUE)
 mdf <- mdf %>%
   mutate(
     DateTimeRound = as.POSIXct(DateTimeRound),
@@ -223,51 +213,60 @@ throughput <- merge(mdf, locMaster)
 
 
 sum(booking$SwabCount,na.rm = TRUE)
+sum(throughput$SwabCount,na.rm = TRUE)
+
+str(scrp)
+str(station)
+str(set1)
+
+str(pdf)
+str(booking)
+str(set2)
+
+str(mdf)
+str(throughput)
+
+head(throughput[order(throughput[,"DateTimeRound"]),], 30)
 
 
 
-
-g01 <- ggplot(data = booking, aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
-  geom_bar(stat="identity", alpha = .7) +
-  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  theme_minimal() +
-  xlab("48 Hours") + ylab("Number counts")
-
-g02 <- ggplot(data = booking, aes(x = factor(DurationDayNumber), y = SwabCount / 1000, fill = Status)) +
-  geom_bar(stat="identity", alpha = .7) +
-  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  theme_minimal() +
-  xlab("Day 1 / Day 2") + ylab("Number counts in Thousands")
-
-grid.arrange(g01, g02, ncol = 1, top = paste("Total Swabs Done vs Booked as of", now, sep = " "))
-
-
-
-
-
-unique(booking$Variable)
 options("scipen" = 100, "digits" = 4)
 
 p1 <- df %>% group_by(variable) %>% summarise(value.sum = sum(value, na.rm = TRUE))
-p2 <- throughput %>% group_by(area) %>% tally(SwabCount)
+p2 <- set2 %>% group_by(area) %>% tally(SwabCount)
 rng <- range(0, p1$value.sum, p2$n)
 
 g1 <- ggplot(data=p1, aes(x = variable, y = value.sum, fill = variable)) +
   geom_bar(stat="identity", alpha = .7) + coord_flip(ylim = rng) +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  # guides(alpha = FALSE) + 
   theme_minimal() +
   xlab("SWab Method") + ylab("Swab Counts")
 
 g2 <- ggplot(data=p2, aes(x = reorder(area,n), y = n, fill = area)) +
   geom_bar(stat="identity", alpha = .7) + coord_flip(ylim = rng) +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  # guides(alpha = FALSE) + 
   theme_minimal() +
   xlab("Macao / Cotai") + ylab("Swab Counts")
 
-
 grid.arrange(g1, g2, ncol = 1, top = "Total Swabs by Method / Location Area")
+
+
+
+g3 <- ggplot(data = booking, aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
+  geom_bar(stat="identity", alpha = .7) +
+  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
+  theme_minimal() +
+  xlab("48 Hours") + ylab("Number counts")
+
+g4 <- ggplot(data = booking, aes(x = factor(DurationDayNumber), y = SwabCount / 1000, fill = Status)) +
+  geom_bar(stat="identity", alpha = .7) +
+  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
+  theme_minimal() +
+  xlab("Day 1 / Day 2") + ylab("Number counts in Thousands")
+
+grid.arrange(g3, g4, ncol = 1, top = paste("Total Swabs Done vs Booked as of", now, sep = " "))
+
+
 
 
 tilevalue <- c(max(filter(throughput, SwabPerDesk.ntile == 1)$SwabPerDesk),
@@ -278,8 +277,7 @@ tilevalue
 
 
 fl <- as_labeller(
-  c(`1` = "below 22.25 swap/desk", `2` = "below 32.86 swap/desk",`3` = "below 43.38 swap/desk", `4` = "below 159.67 swap/desk"))
-#c(`1` = "below 27 swap/desk", `2` = "below 33 swap/desk",`3` = "below 42 swap/desk", `4` = "below 122 swap/desk"))
+  c(`1` = "below 23 swab/counter", `2` = "23 - 35 swab/counter",`3` = "35 - 50 swab/counter", `4` = "above 50 swab/counter"))
 
 ggplot(throughput, aes(x = HourNumber, fill = factor(DurationDayNumber))) +
   geom_histogram(binwidth = 1, alpha = .7) +
@@ -288,45 +286,48 @@ ggplot(throughput, aes(x = HourNumber, fill = factor(DurationDayNumber))) +
   facet_wrap(~SwabPerDesk.ntile, ncol = 2, labeller = fl) +
   theme_minimal() +
   xlab("24 Hours") + ylab("Counts") +
-  ggtitle("Swap per desk in 4-tiles, 24 hours")
+  ggtitle("Swap per counter in 4-tiles, 24 hours")
 
 
-p3 <- set2 %>% group_by(Location, Status) %>% tally(SwabCount)
+p5 <- set2 %>% group_by(Location, Status) %>% tally(SwabCount)
 
-ggplot(p3, aes(x = reorder(Location, n), y = n, fill = Status)) +
+g5 <- ggplot(p5, aes(x = reorder(Location, n), y = n, fill = Status)) +
   geom_bar(stat = "identity", alpha = .7) + coord_flip() +
   scale_fill_viridis_d(name = "Day", option = 'magma') +
-  # guides(alpha = FALSE) + 
   theme_minimal() +
-  ggtitle(paste("Total swabs by location as of", now, sep = " ")) + 
   xlab("Location") + ylab("Swab Counts")
+  
+p6 <- set2 %>% group_by(LocationEnglish, Status) %>% tally(SwabCount)
 
-p3 <- set2 %>% group_by(LocationEnglish, Status) %>% tally(SwabCount)
-
-ggplot(p3, aes(x = reorder(LocationEnglish, n), y = n, fill = Status)) +
+g6 <- ggplot(p6, aes(x = reorder(LocationEnglish, n), y = n, fill = Status)) +
   geom_bar(stat = "identity", alpha = .7) + coord_flip() +
   scale_fill_viridis_d(name = "Day", option = 'magma') +
-  # guides(alpha = FALSE) + 
   theme_minimal() +
-  ggtitle(paste("Total swabs by location as of", now, sep = " ")) + 
   xlab("Location") + ylab("Swab Counts")
+  
+grid.arrange(g6, g5, ncol = 2, top = paste("Total Swabs done vs booked by Location as of", now, sep = " "))
 
 
 
-ggplot(set1, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
+g7 <- ggplot(set1, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
   geom_boxplot(alpha = .7) +
   coord_flip() +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
-  # guides(fill = FALSE, alpha = FALSE) + 
   theme_minimal() +
-  ggtitle("Number of swab desk by location") + xlab("Location") + ylab("Number of Swab Desks")
+  xlab("Location") + ylab("Number of Swab Counters")
+
+g8 <- ggplot(set1, aes(x = reorder(LocationEnglish, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
+  geom_boxplot(alpha = .7) +
+  coord_flip() +
+  scale_fill_viridis_c(option = 'magma', direction = -1) +
+  theme_minimal() +
+  xlab("Location") + ylab("Number of Swab Counters")
+
+grid.arrange(g8, g7, ncol = 2, top = paste("Number of swab counters by location as of", now, sep = " "))
 
 # filter(set1, DeskCount.mean >= 20)
 
 
-unique(throughput$Location)
-t <- filter(throughput, Location == "澳門理工大學懷遠樓展覽廳")
-unique(throughput$DateTimeRound)
 
 prdf <- throughput %>% 
   group_by(Location, DeskCount.ntile) %>% 
@@ -349,35 +350,34 @@ prdf <- throughput %>%
     values_to = "prop"
   )
 
-
-
 ggplot(prdf, aes(DeskCount.ntile, Location)) +
   geom_tile(aes(fill = prop), alpha = .7) +
   geom_text(aes(label = scales::percent(prop, accuracy = 1)), size = 3) +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
-  guides(fill = FALSE, alpha = FALSE) + theme_minimal() +
-  ggtitle("Number Of swabs in proportions by locations") + xlab("Number of Swab Desks in 5-tiles")  + ylab("Location")
+  theme_minimal() +
+  xlab("Number of Swab Counters in 5-tiles")  + ylab("Location") + 
+  ggtitle("Number of swabs in proportions by locations")
 
 #unique(throughput[c("Location", "AvgSwabPerDesk")]) %>% arrange(-AvgSwabPerDesk)
 
 
-pldf1 <- throughput[c("Location", "DateTimeRound", "DurationHour","口咽拭", "鼻咽拭")] %>% 
+tp1 <- throughput[c("Location", "DateTimeRound", "DurationHour","口咽拭", "鼻咽拭")] %>% 
   pivot_longer(
     cols = c("口咽拭", "鼻咽拭"),
     names_to = "variable",
     values_to = "Count"
   )
-pldf2 <- throughput[c("Location", "DateTimeRound", "DurationHour","口採樣點.mean","鼻採樣點.mean")] %>% 
+tp2 <- throughput[c("Location", "DateTimeRound", "DurationHour","口採樣點.mean","鼻採樣點.mean")] %>% 
   pivot_longer(
     cols = c("口採樣點.mean","鼻採樣點.mean"),
     names_to = "variable",
     values_to = "Count"
   )
-pldf <- rbind(pldf1, pldf2) %>%
+tp <- rbind(tp1, tp2) %>%
   mutate(variable = case_when(variable == "口咽拭" ~ "M.Swab Sum",
-                              variable == "口採樣點.mean" ~ "M.Swab Desk",
+                              variable == "口採樣點.mean" ~ "M.Swab Counter",
                               variable == "鼻咽拭" ~ "N.Swab Sum",
-                              variable == "鼻採樣點.mean" ~ "N.Swab Desk",
+                              variable == "鼻採樣點.mean" ~ "N.Swab Counter",
                               TRUE ~ "N/A"
   )) %>%
   arrange(Location, DateTimeRound, DurationHour, variable) %>%
@@ -385,18 +385,16 @@ pldf <- rbind(pldf1, pldf2) %>%
   mutate(prop = Count / sum(Count, na.rm = TRUE)) %>%
   ungroup()
 
-unique(pldf$Location)
-
+unique(tp$Location)
 
 
 s1 <- c("澳門文化中心","鏡平學校（中學部）","望廈體育中心一樓","工人體育場一樓")
 
-sh1 <- filter(pldf, Location %in% s1) %>%
+sh1 <- filter(tp, Location %in% s1) %>%
   ggplot(aes(DateTimeRound, variable)) +
   geom_tile(aes(fill = prop), alpha = .8) +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   facet_wrap(~Location, ncol = 1) +
-  # guides(fill = FALSE, alpha = FALSE) + 
   theme_minimal() +
   xlab("") + ylab("Number proportion")
 
@@ -406,21 +404,19 @@ sb1 <- filter(throughput, Location %in% s1) %>%
   geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   facet_wrap(~Location, ncol = 1) +
-  # guides(fill = FALSE, alpha = FALSE) + 
   theme_minimal() +
-  xlab("") + ylab("Swabs per desk")
+  xlab("") + ylab("Swabs per counter")
 
 grid.arrange(sh1, sb1, nrow = 1, top = "Set of 4 locations from Macao area in 3 days")
 
 
 s2 <- c("北安客運碼頭","威尼斯人展覽館A、B、C館","澳門大學","奧林匹克體育中心室內體育館")
 
-sh2 <- filter(pldf, Location %in% s2) %>%
+sh2 <- filter(tp, Location %in% s2) %>%
   ggplot(aes(DateTimeRound, variable)) +
   geom_tile(aes(fill = prop), alpha = .8) +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   facet_wrap(~Location, ncol = 1) +
-  # guides(fill = FALSE, alpha = FALSE) + 
   theme_minimal() +
   xlab("") + ylab("Number proportion")
 
@@ -430,27 +426,19 @@ sb2 <- filter(throughput, Location %in% s2) %>%
   geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   facet_wrap(~Location, ncol = 1) +
-  #　guides(fill = FALSE, alpha = FALSE) + 
   theme_minimal() +
-  xlab("") + ylab("Swabs per desk")
+  xlab("") + ylab("Swabs per counter")
 
 grid.arrange(sh2, sb2, nrow = 1, top = "Set of 4 locations from Cotai area in 3 days")
 
 
 
-p4 <- throughput %>% filter(SwabPerDesk.ntile == 4)
+tp4tile <- throughput %>% filter(SwabPerDesk.ntile == 4)
 
 plot <- ggmap(get_map(location = "taipa, macao", zoom = 12), darken = .5, 
               base_layer = ggplot(data = p4, aes(x = lon, y = lat, frame = DurationHour, ids = Location))) +
-  geom_point(data = p4, aes(color = SwabPerDesk, size = SwabPerDesk, alpha = .5)) +
+  geom_point(data = tp4tile, aes(color = SwabPerDesk, size = SwabPerDesk, alpha = .5)) +
   scale_size(range = c(0, 12)) +
   scale_color_viridis_c(option = "magma")
 
 ggplotly(plot)
-
-
-
-
-
-system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE)
-system("taskkill /im geckodriver.exe /f", intern=FALSE, ignore.stdout=FALSE)

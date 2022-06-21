@@ -1,6 +1,4 @@
 
-
-library(archive)
 library(tidyverse)
 library(ggmap)
 
@@ -36,14 +34,27 @@ locMaster.2 <- merge(x=locMaster.1,y=locXlsx,by="Sno",all=TRUE)
 # view(locMaster.2)
 
 # check location name in chinese for differences
-filter(locMaster.2, Location != LocationXlsx)
+# filter(locMaster.2, is.na(LocationChinese))
+# filter(locMaster.2, is.na(LocationEnglish))
+# filter(locMaster.2, is.na(LocationXlsx))
 
 # Assign name from Xlsx
 locMaster.2$Location <- ifelse(is.na(locMaster.2$LocationChinese), locMaster.2$LocationXlsx, locMaster.2$LocationChinese)
 
+# Assign English name from Xlsx
+# B29 鏡湖醫院禮堂
+# B30 科大體育館
+# B31 南粵青茂口岸
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "鏡湖醫院禮堂","Kiang Wu Hospital 3rd floor",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "科大體育館","Gymnasium at M.U.S.T",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "南粵青茂口岸","Namyue QingMao Port",locMaster.2$LocationEnglish)
+# Correction for English names
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "塔石體育館B館","Tap Seac Multisport Pavilion - Pavilion B",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "威尼斯人展覽館A、B、C館","The Venetian Macau Exhibition A B C",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "工人體育場一樓","Macao Federation of Trade Unions Workers Stadium 1st floor",locMaster.2$LocationEnglish)
+
 # str(locMaster.2)
 # view(locMaster.2)
-
 
 ## Prepare for Location adding lon and lat
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大醫院","Macao, University Hospital",locMaster.2$Location)
@@ -63,10 +74,8 @@ locMaster.2$area <- ifelse(locMaster.2$lat>=22.17,'Macao','Taipa')
 # str(locMaster.2)
 # view(locMaster.2)
 
-
 locMaster <- data.frame(locMaster.2[ , c("Sno", "Location", "LocationEnglish", "lon", "lat", "area")])
-
-view(locMaster)
+# view(locMaster)
 
 ## Export to csv
 write_csv(locMaster, "data/location-master/location-master-20220619.csv")
