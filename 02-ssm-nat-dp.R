@@ -3,9 +3,6 @@ library(lubridate)
 library(readxl)
 library(tidyverse)
 library(gridExtra)
-# library(flux)
-# library(reshape)
-# library(ggmap)
 library(plotly)
 library(GGally)
 
@@ -13,7 +10,8 @@ now <- Sys.time()
 now
 
 targetTime <- as.POSIXct("2022-06-19 15:23", "Asia/Taipei")
-# targetTimeRound <- 
+targetTimeRound <- floor_date(targetTime, "30mins")
+# targetTimeRound <- now
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv("data/location-master/location-master-20220619.csv")
@@ -124,10 +122,10 @@ station <- station %>%
          AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup()
 
-## Inspect filled data via the complete process
+### Inspect filled data via the complete process
 # filter(station, DateTimeRound == "2022-06-19 12:00")
 
-# Supply for Location Master data
+### Supply for Location Master data
 set1 <- merge(station, locMaster)
 
 
@@ -188,7 +186,7 @@ booking <- pdf %>%
   )
 str(booking)
 
-# Supply for Location Master data
+### Supply for Location Master data
 set2 <- merge(booking, locMaster)
 str(set2)
 
@@ -212,23 +210,26 @@ mdf <- mdf %>%
 throughput <- merge(mdf, locMaster)
 
 
+## Basic checking
+
 sum(booking$SwabCount,na.rm = TRUE)
 sum(throughput$SwabCount,na.rm = TRUE)
 
-str(scrp)
-str(station)
-str(set1)
+# str(scrp)
+# str(station)
+# str(set1)
 
-str(pdf)
-str(booking)
-str(set2)
+# str(pdf)
+# str(booking)
+# str(set2)
 
-str(mdf)
-str(throughput)
+# str(mdf)
+# str(throughput)
 
-head(throughput[order(throughput[,"DateTimeRound"]),], 30)
+# head(throughput[order(throughput[,"DateTimeRound"]),], 30)
 
 
+## Start plotting
 
 options("scipen" = 100, "digits" = 4)
 
@@ -264,7 +265,7 @@ g4 <- ggplot(data = booking, aes(x = factor(DurationDayNumber), y = SwabCount / 
   theme_minimal() +
   xlab("Day 1 / Day 2") + ylab("Number counts in Thousands")
 
-grid.arrange(g3, g4, ncol = 1, top = paste("Total Swabs Done vs Booked as of", now, sep = " "))
+grid.arrange(g3, g4, ncol = 1, top = paste("Total Swabs Done vs Booked as of", targetTimeRound, sep = " "))
 
 
 
@@ -305,7 +306,7 @@ g6 <- ggplot(p6, aes(x = reorder(LocationEnglish, n), y = n, fill = Status)) +
   theme_minimal() +
   xlab("Location") + ylab("Swab Counts")
   
-grid.arrange(g6, g5, ncol = 2, top = paste("Total Swabs done vs booked by Location as of", now, sep = " "))
+grid.arrange(g6, g5, ncol = 2, top = paste("Total Swabs done vs booked by Location as of", targetTimeRound, sep = " "))
 
 
 
@@ -323,7 +324,7 @@ g8 <- ggplot(set1, aes(x = reorder(LocationEnglish, AvgDeskCount), y = DeskCount
   theme_minimal() +
   xlab("Location") + ylab("Number of Swab Counters")
 
-grid.arrange(g8, g7, ncol = 2, top = paste("Number of swab counters by location as of", now, sep = " "))
+grid.arrange(g8, g7, ncol = 2, top = paste("Number of swab counters by location as of", targetTimeRound, sep = " "))
 
 # filter(set1, DeskCount.mean >= 20)
 
