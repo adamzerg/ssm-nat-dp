@@ -50,10 +50,14 @@ locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "鏡湖醫院禮�
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "科大體育館","Macao Science and Technology University Hospital Stadium",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "南粵青茂口岸","Nucleic acid detection station at Namyue QingMao Port",locMaster.2$LocationEnglish)
 }
-# Correction for English names
+# Correction for English names avoid duplication in English name
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "塔石體育館B館","Tap Seac Multisport Pavilion - Pavilion B",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "威尼斯人展覽館A、B、C館","The Venetian Macau Exhibition A B C",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "工人體育場一樓","Macao Federation of Trade Unions Workers Stadium 1st floor",locMaster.2$LocationEnglish)
+# Shorten for English names
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "街總石排灣家庭及社區綜合服務中心","Seac Pai Van Family Support and Community Service Center",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "街坊會聯合總會社區服務大樓","Community Services Building of the General Union of Neighbourhood",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "中葡職業技術學校體育館","Indoor Sports Facilities at the Luso-Chinese Middle School",locMaster.2$LocationEnglish)
 
 # str(locMaster.2)
 # view(locMaster.2)
@@ -68,10 +72,13 @@ locMaster.2[grep("奧林匹克體育中心.*", locMaster.2$Location, perl=T), ]$
 locMaster.2[grep(".*湖畔", locMaster.2$Location, perl=T), ]$MapLoc <- "Edifício do Lago, Macao"
 locMaster.2[grep("工人體育.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Campo dos Operários da Associação Geral dos Operários de Macau"
 locMaster.2[grep("望廈體育中心.*", locMaster.2$Location, perl=T), ]$MapLoc <- "望廈體育中心 Centro Desportivo Mong-Há"
-locMaster.2[grep("南粵青茂口岸.*", locMaster.2$Location, perl=T), ]$MapLoc <- "青茂口岸澳門邊檢大樓"
+locMaster.2[grep("南粵青茂口岸.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Edifício Posto Fronteiriço de Macau do Posto Fronteiriço Qingmao"
 locMaster.2[grep("威尼斯人.*", locMaster.2$Location, perl=T), ]$MapLoc <- "澳門威尼斯人"
 locMaster.2 <- mutate_geocode(locMaster.2, MapLoc)
-locMaster.2$area <- ifelse(locMaster.2$lat>=22.17,'Macao','Taipa')
+locMaster.2$area <- ifelse(locMaster.2$lat<=22.145,"路環",
+                        ifelse(locMaster.2$lat<=22.17,"氹仔",
+                        ifelse(locMaster.2$lat<=22.197,"半島南",
+                        "半島北")))
 
 # str(locMaster.2)
 # view(locMaster.2)

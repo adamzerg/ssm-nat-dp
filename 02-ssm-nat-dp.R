@@ -2,16 +2,13 @@
 library(lubridate)
 library(readxl)
 library(tidyverse)
+library(grid)
 library(gridExtra)
 library(plotly)
+library(ggmap)
 library(GGally)
 
-## sets Google map for this session
-register_google(key = "AIzaSyD9z90fvzxmOhRzoNbxbwOmuIXI6CVKcTE")
-ggmap_hide_api_key()
-
 now <- Sys.time()
-now
 
 verMaster <- read_csv("data/version-master/version-master.csv", col_types = cols(StartTime = col_character(), EndTime = col_character()), quote="\"")
 versiondf <- filter(verMaster, CurrentFlag == 1)
@@ -31,11 +28,12 @@ if (targetTime %within% interval(versionSt, versionEt)) {
 versionTi <- interval(versionSt, versionEt)
 versionTr <- seq(versionSt, versionEt, "30 mins")
 
+versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
 
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv(paste("data/location-master/location-master-",version,".csv", sep = ""))
-tail(locMaster,18)
+# tail(locMaster,18)
 
 ### Loop to ingest all scraped data
 filelist <- dir('data/aptmon', full.names=TRUE)
@@ -194,7 +192,7 @@ booking <- pdf %>%
     DurationHour = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"hours"),
     DurationDay = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days"),
     DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
-    Status = ifelse(DateTimeRound <= versionEt, "Done", "Booked")
+    Status = ifelse(DateTimeRound <= versionEt, "已完成", "預約中")
   )
 str(booking)
 
@@ -224,9 +222,6 @@ throughput <- merge(mdf, locMaster)
 
 ## Basic checking
 
-sum(booking$SwabCount,na.rm = TRUE)
-sum(throughput$SwabCount,na.rm = TRUE) / 540000
-
 # str(scrp)
 # str(station)
 # str(set1)
@@ -241,233 +236,229 @@ sum(throughput$SwabCount,na.rm = TRUE) / 540000
 # head(throughput[order(throughput[,"DateTimeRound"]),], 30)
 
 
-## Start plotting
 
+totalSwabBooking <- sum(booking$SwabCount,na.rm = TRUE)
+totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
+
+## Start plotting
+tail(p1)
 options("scipen" = 100, "digits" = 4)
 
-p1 <- df %>% group_by(variable) %>% summarise(value.sum = sum(value, na.rm = TRUE))
-p2 <- set2 %>% group_by(area) %>% tally(SwabCount)
-rng <- range(0, p1$value.sum, p2$n)
+p1 <- df %>% mutate(Status = ifelse(as.POSIXlt(paste(df$SwabDate, df$SwabTime)) <= versionEt, "已完成", "預約中")) %>%
+  group_by(variable, Status) %>%
+  summarise(value.sum = sum(value, na.rm = TRUE))
+p2 <- set2 %>% group_by(area, Status) %>% tally(SwabCount)
 
-g1 <- ggplot(data=p1, aes(x = variable, y = value.sum, fill = variable)) +
-  geom_bar(stat="identity", alpha = .7) + coord_flip(ylim = rng) +
+g1 <- ggplot(data=p1, aes(x = variable, y = value.sum, fill = Status)) +
+  geom_bar(stat="identity", alpha = .7) +
+  coord_flip() +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
   theme_minimal() +
-  xlab("SWab Method") + ylab("Swab Counts")
+  xlab("採集方法") + ylab("採樣數") +
+  ggtitle("口鼻採集法總計數")
+  # ggtitle("Total Swabs Done vs Booked by Swab Method")
 
-g2 <- ggplot(data=p2, aes(x = reorder(area,n), y = n, fill = area)) +
-  geom_bar(stat="identity", alpha = .7) + coord_flip(ylim = rng) +
+g2 <- ggplot(data=p2, aes(x = reorder(area,n), y = n, fill = Status)) +
+  geom_bar(stat="identity", alpha = .7) +
+  coord_flip() +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
   theme_minimal() +
-  xlab("Macao / Cotai") + ylab("Swab Counts")
-
-grid.arrange(g1, g2, ncol = 1, top = "Total Swabs by Method / Location Area")
-
-
+  xlab("地區") + ylab("採樣數") +
+  ggtitle("地區總計數")
 
 g3 <- ggplot(data = booking, aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
   geom_bar(stat="identity", alpha = .7) +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
   theme_minimal() +
-  xlab("Hours in interval") + ylab("Number counts")
+  xlab("每小時") + ylab("採樣數") +
+  ggtitle("每小時總計數")
 
-g4 <- ggplot(data = booking, aes(x = factor(DurationDayNumber), y = SwabCount / 1000, fill = Status)) +
+g4 <- ggplot(data = booking, aes(x = reorder(factor(DurationDayNumber),SwabCount), y = SwabCount, fill = Status)) +
   geom_bar(stat="identity", alpha = .7) +
+  coord_flip() +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
   theme_minimal() +
-  xlab("Day 1 / Day 2") + ylab("Number counts in Thousands")
+  xlab("第N天") + ylab("採樣數") +
+  ggtitle("當天總計數")
 
-grid.arrange(g3, g4, ncol = 1, top = paste("Total Swabs Done vs Booked as of", targetTimeRound, sep = " "))
-
-
-
-
-tilevalue <- c(max(filter(throughput, SwabPerDesk.ntile == 1)$SwabPerDesk),
-               max(filter(throughput, SwabPerDesk.ntile == 2)$SwabPerDesk),
-               max(filter(throughput, SwabPerDesk.ntile == 3)$SwabPerDesk),
-               max(filter(throughput, SwabPerDesk.ntile == 4)$SwabPerDesk))
-tilevalue
+# grid.arrange(g1, g3, g2, g4, ncol = 2,
+# top = paste("Total Swab Done ", totalSwabDone, " out of ", totalSwabBooking, " bookings as of ", targetTimeRound, sep = " "))
 
 
-fl <- as_labeller(
-  c(`1` = "below 23 swab/counter", `2` = "23 - 35 swab/counter",`3` = "35 - 50 swab/counter", `4` = "above 50 swab/counter"))
+# tilevalue <- c(max(filter(throughput, SwabPerDesk.ntile == 1)$SwabPerDesk),
+#                max(filter(throughput, SwabPerDesk.ntile == 2)$SwabPerDesk),
+#                max(filter(throughput, SwabPerDesk.ntile == 3)$SwabPerDesk),
+#                max(filter(throughput, SwabPerDesk.ntile == 4)$SwabPerDesk))
+# tilevalue
+# 
+# 
+# fl <- as_labeller(
+#   c(`1` = "below 23 swab/counter", `2` = "23 - 35 swab/counter",`3` = "35 - 50 swab/counter", `4` = "above 50 swab/counter"))
+# 
+# ggplot(throughput, aes(x = HourNumber, fill = factor(DurationDayNumber))) +
+#   geom_histogram(binwidth = 1, alpha = .7) +
+#   geom_hline(linetype = "dotted", yintercept = 32, color = "goldenrod") +
+#   scale_fill_viridis_d(name = "Day", option = 'magma') +
+#   facet_wrap(~SwabPerDesk.ntile, ncol = 2, labeller = fl) +
+#   theme_minimal() +
+#   xlab("24 Hours") + ylab("Counts") +
+#   ggtitle("Swap per counter in 4-tiles, 24 hours")
 
-ggplot(throughput, aes(x = HourNumber, fill = factor(DurationDayNumber))) +
-  geom_histogram(binwidth = 1, alpha = .7) +
-  geom_hline(linetype = "dotted", yintercept = 32, color = "goldenrod") +
-  scale_fill_viridis_d(name = "Day", option = 'magma') +
-  facet_wrap(~SwabPerDesk.ntile, ncol = 2, labeller = fl) +
-  theme_minimal() +
-  xlab("24 Hours") + ylab("Counts") +
-  ggtitle("Swap per counter in 4-tiles, 24 hours")
 
+areaList <- unique(locMaster$area)
 
-p5 <- set2 %>% group_by(Location, Status) %>% tally(SwabCount)
+for (setArea in areaList) {
+# setArea <- #"半島南"
+
+# if (setArea == "Macau") {
+#   areaSet <- c("澳門文化中心","鏡平學校（中學部）","望廈體育中心一樓","工人體育場一樓")
+# } else if (setArea == "Taipa") {
+#   areaSet <- c("北安客運碼頭","威尼斯人展覽館A、B、C館","澳門大學","奧林匹克體育中心室內體育館")
+# } else if (setArea == "Coloane") {
+#   areaSet <- c("石排灣公立學校","澳門保安部隊高等學校","街總石排灣家庭及社區綜合服務中心","澳門大學")
+# }
+
+# unique(throughput[c("Sno","Location", "AvgSwabPerDesk")])
+areaSet0 <- throughput %>% filter(area == setArea & substr(Sno,0,1) == "B") %>%
+  group_by(Location) %>%
+  tally(AvgSwabPerDesk) %>%
+  slice_min(n, n = 3) %>%
+  select(Location)
+
+areaSet <- paste(areaSet0$Location, sep=" ", collapse=NULL)
+
+p5 <- set2 %>% filter(Location %in% areaSet) %>%
+  group_by(Location, Status) %>%
+  tally(SwabCount)
 
 g5 <- ggplot(p5, aes(x = reorder(Location, n), y = n, fill = Status)) +
   geom_bar(stat = "identity", alpha = .7) + coord_flip() +
   scale_fill_viridis_d(name = "Day", option = 'magma') +
   theme_minimal() +
-  xlab("Location") + ylab("Swab Counts")
+  xlab("採樣站") + ylab("總計數") +
+  ggtitle("採樣站已完成及預約中總計數")
   
-p6 <- set2 %>% group_by(LocationEnglish, Status) %>% tally(SwabCount)
+p6 <- set1 %>% filter(Location %in% areaSet)
 
-g6 <- ggplot(p6, aes(x = reorder(LocationEnglish, n), y = n, fill = Status)) +
-  geom_bar(stat = "identity", alpha = .7) + coord_flip() +
-  scale_fill_viridis_d(name = "Day", option = 'magma') +
-  theme_minimal() +
-  xlab("Location") + ylab("Swab Counts")
-  
-grid.arrange(g6, g5, ncol = 2, top = paste("Total Swabs done vs booked by Location as of", targetTimeRound, sep = " "))
-
-
-
-g7 <- ggplot(set1, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
+g6 <- ggplot(p6, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
   geom_boxplot(alpha = .7) +
   coord_flip() +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   theme_minimal() +
-  xlab("Location") + ylab("Number of Swab Counters")
+  xlab("採樣站") + ylab("可採樣點數目") +
+  ggtitle("採樣站可採樣點中位數")
 
-g8 <- ggplot(set1, aes(x = reorder(LocationEnglish, AvgDeskCount), y = DeskCount.mean, fill = AvgDeskCount)) +
-  geom_boxplot(alpha = .7) +
-  coord_flip() +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  theme_minimal() +
-  xlab("Location") + ylab("Number of Swab Counters")
-
-grid.arrange(g8, g7, ncol = 2, top = paste("Number of swab counters by location as of", targetTimeRound, sep = " "))
+# grid.arrange(g5, g6, ncol = 2, top = paste("Number of swab counters by location as of", targetTimeRound, sep = " "))
 
 # filter(set1, DeskCount.mean >= 20)
 
 
 
-prdf <- throughput %>% 
-  group_by(Location, DeskCount.ntile) %>% 
-  summarise(SwabCountByDesk = sum(SwabCount, na.rm = TRUE)) %>% 
-  ungroup() %>%
-  group_by(Location) %>%
-  mutate(prop = SwabCountByDesk / sum(SwabCountByDesk)) %>%
-  ungroup() %>%
-  
-  select(-SwabCountByDesk) %>%
-  pivot_wider(
-    id_cols = Location,
-    names_from = DeskCount.ntile,
-    values_from = prop
-  ) %>% 
-  mutate(Location = fct_reorder(Location, `5`)) %>%
-  pivot_longer(
-    cols = -Location,
-    names_to = "DeskCount.ntile",
-    values_to = "prop"
-  )
-
-ggplot(prdf, aes(DeskCount.ntile, Location)) +
-  geom_tile(aes(fill = prop), alpha = .7) +
-  geom_text(aes(label = scales::percent(prop, accuracy = 1)), size = 3) +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  theme_minimal() +
-  xlab("Number of Swab Counters in 5-tiles")  + ylab("Location") + 
-  ggtitle("Number of swabs in proportions by locations")
+# prdf <- throughput %>% 
+#   group_by(Location, DeskCount.ntile) %>% 
+#   summarise(SwabCountByDesk = sum(SwabCount, na.rm = TRUE)) %>% 
+#   ungroup() %>%
+#   group_by(Location) %>%
+#   mutate(prop = SwabCountByDesk / sum(SwabCountByDesk)) %>%
+#   ungroup() %>%
+#   
+#   select(-SwabCountByDesk) %>%
+#   pivot_wider(
+#     id_cols = Location,
+#     names_from = DeskCount.ntile,
+#     values_from = prop
+#   ) %>% 
+#   mutate(Location = fct_reorder(Location, `5`)) %>%
+#   pivot_longer(
+#     cols = -Location,
+#     names_to = "DeskCount.ntile",
+#     values_to = "prop"
+#   )
+# 
+# ggplot(prdf, aes(DeskCount.ntile, Location)) +
+#   geom_tile(aes(fill = prop), alpha = .7) +
+#   geom_text(aes(label = scales::percent(prop, accuracy = 1)), size = 3) +
+#   scale_fill_viridis_c(option = 'magma', direction = -1) +
+#   theme_minimal() +
+#   xlab("Number of Swab Counters in 5-tiles")  + ylab("Location") + 
+#   ggtitle("Number of swabs in proportions by locations")
 
 #unique(throughput[c("Location", "AvgSwabPerDesk")]) %>% arrange(-AvgSwabPerDesk)
 
 
-tp1 <- throughput[c("Location", "DateTimeRound", "DurationHour","口咽拭", "鼻咽拭")] %>% 
-  pivot_longer(
-    cols = c("口咽拭", "鼻咽拭"),
-    names_to = "variable",
-    values_to = "Count"
-  )
-tp2 <- throughput[c("Location", "DateTimeRound", "DurationHour","口採樣點.mean","鼻採樣點.mean")] %>% 
-  pivot_longer(
-    cols = c("口採樣點.mean","鼻採樣點.mean"),
-    names_to = "variable",
-    values_to = "Count"
-  )
-tp <- rbind(tp1, tp2) %>%
-  mutate(variable = case_when(variable == "口咽拭" ~ "M.Swab Sum",
-                              variable == "口採樣點.mean" ~ "M.Swab Counter",
-                              variable == "鼻咽拭" ~ "N.Swab Sum",
-                              variable == "鼻採樣點.mean" ~ "N.Swab Counter",
-                              TRUE ~ "N/A"
-  )) %>%
-  arrange(Location, DateTimeRound, DurationHour, variable) %>%
-  group_by(Location, variable) %>%
-  mutate(prop = Count / sum(Count, na.rm = TRUE)) %>%
-  ungroup()
+# tp1 <- throughput[c("Location", "DateTimeRound", "DurationHour","口咽拭", "鼻咽拭")] %>% 
+#   pivot_longer(
+#     cols = c("口咽拭", "鼻咽拭"),
+#     names_to = "variable",
+#     values_to = "Count"
+#   )
+# tp2 <- throughput[c("Location", "DateTimeRound", "DurationHour","口採樣點.mean","鼻採樣點.mean")] %>% 
+#   pivot_longer(
+#     cols = c("口採樣點.mean","鼻採樣點.mean"),
+#     names_to = "variable",
+#     values_to = "Count"
+#   )
+# tp <- rbind(tp1, tp2) %>%
+#   mutate(variable = case_when(variable == "口咽拭" ~ "M.Swab Sum",
+#                               variable == "口採樣點.mean" ~ "M.Swab Counter",
+#                               variable == "鼻咽拭" ~ "N.Swab Sum",
+#                               variable == "鼻採樣點.mean" ~ "N.Swab Counter",
+#                               TRUE ~ "N/A"
+#   )) %>%
+#   arrange(Location, DateTimeRound, DurationHour, variable) %>%
+#   group_by(Location, variable) %>%
+#   mutate(prop = Count / sum(Count, na.rm = TRUE)) %>%
+#   ungroup()
 
-unique(tp$Location)
+# unique(tp$Location)
 
 
-s1 <- c("澳門文化中心","鏡平學校（中學部）","望廈體育中心一樓","工人體育場一樓")
-
-sb1 <- filter(set2, Location %in% s1) %>% 
+sb0 <- filter(set2, Location %in% areaSet) %>% 
   ggplot(aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
   geom_bar(stat="identity", alpha = .7) +
   scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  facet_wrap(~LocationEnglish, ncol = 1) +
+  facet_wrap(~Location, ncol = 1) +
   theme_minimal() +
-  xlab("Hours in interval") + ylab("Booking counts")
+  xlab("每小時") + ylab("總計數") +
+  ggtitle("採樣站已完成及預約中總計數")
 
-sh1 <- filter(tp, Location %in% s1) %>%
-  ggplot(aes(DateTimeRound, variable)) +
-  geom_tile(aes(fill = prop), alpha = .8) +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  facet_wrap(~LocationEnglish, ncol = 1) +
-  theme_minimal() +
-  xlab("Hours in interval") + ylab("Number proportion")
+# sh0 <- filter(tp, Location %in% areaSet) %>%
+#   ggplot(aes(DateTimeRound, variable)) +
+#   geom_tile(aes(fill = prop), alpha = .8) +
+#   scale_fill_viridis_c(option = 'magma', direction = -1) +
+#   facet_wrap(~LocationEnglish, ncol = 1) +
+#   theme_minimal() +
+#   xlab("Hours in interval") + ylab("Number proportion")
 
-st1 <- filter(throughput, Location %in% s1) %>% 
+st0 <- filter(throughput, Location %in% areaSet) %>% 
   ggplot(aes(x = DateTimeRound, y = SwabPerDesk, fill = SwabPerDesk)) +
   geom_bar(stat = "identity", alpha = .8) +
   geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
   scale_fill_viridis_c(option = 'magma', direction = -1) +
-  facet_wrap(~LocationEnglish, ncol = 1) +
+  facet_wrap(~Location, ncol = 1) +
   theme_minimal() +
-  xlab("Hours in interval") + ylab("Throughput (number of swabs per counter)")
+  xlab("每小時") + ylab("吞吐量") +
+  ggtitle("採樣站吞吐量即每採樣點半小時採樣數")
 
-grid.arrange(sb1, st1, nrow = 1, top = "Set of 4 locations from Macao area")
+# grid.arrange(sb0, st0, nrow = 1, top = "Set of 4 locations from Macao area")
 
-
-s2 <- c("北安客運碼頭","威尼斯人展覽館A、B、C館","澳門大學","奧林匹克體育中心室內體育館")
-
-sb2 <- filter(set2, Location %in% s2) %>% 
-  ggplot(aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
-  geom_bar(stat="identity", alpha = .7) +
-  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  facet_wrap(~LocationEnglish, ncol = 1) +
-  theme_minimal() +
-  xlab("Hours in interval") + ylab("Booking counts")
-
-sh2 <- filter(tp, Location %in% s2) %>%
-  ggplot(aes(DateTimeRound, variable)) +
-  geom_tile(aes(fill = prop), alpha = .8) +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  facet_wrap(~LocationEnglish, ncol = 1) +
-  theme_minimal() +
-  xlab("Hours in interval") + ylab("Number proportion")
-
-st2 <- filter(throughput, Location %in% s2) %>% 
-  ggplot(aes(x = DateTimeRound, y = SwabPerDesk, fill = SwabPerDesk)) +
-  geom_bar(stat = "identity", alpha = .8) +
-  geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  facet_wrap(~LocationEnglish, ncol = 1) +
-  theme_minimal() +
-  xlab("Hours in interval") + ylab("Throughput (number of swabs per counter)")
-
-grid.arrange(sb2, st2, nrow = 1, top = "Set of 4 locations from Cotai area")
+png(paste("Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep = ""), width = 1200, height = 2000, res = 100)
+# grid.arrange(g1, g3, g2, g4, g6, g8, sb1, st1, sb2, st2, ncol = 2,
+grid.arrange(layout_matrix = rbind(c(1,2), c(3,4), c(5,5), c(6,6)), g3, g2, g5, g6, sb0, st0, ncol = 2,
+top = textGrob(paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
+          ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
+          , "\n數據基於現在時間 ", targetTimeRound, " 以下統整為",setArea,"區", sep = ""), gp=gpar(fontsize=24,font=8)),
+bottom = textGrob(paste("* 數據來源官方但由民間統計整理，可能有延遲。 ** 各地區取吞吐量最低三個檢測站作顯示，僅供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
+dev.off()
+}
 
 
-
-tp4tile <- throughput %>% filter(SwabPerDesk.ntile == 4)
-
-plot <- ggmap(get_map(location = "taipa, macao", zoom = 12), darken = .5, 
-              base_layer = ggplot(data = tp4tile, aes(x = lon, y = lat, frame = DurationHour, ids = Location))) +
-  geom_point(data = tp4tile, aes(color = SwabPerDesk, size = SwabPerDesk, alpha = .5)) +
-  scale_size(range = c(0, 12)) +
-  scale_color_viridis_c(option = "magma")
-
-ggplotly(plot)
+# tp4tile <- throughput %>% filter(SwabPerDesk.ntile == 4)
+# 
+# plot <- ggmap(get_map(location = "taipa, macao", zoom = 12), darken = .5, 
+#               base_layer = ggplot(data = tp4tile, aes(x = lon, y = lat, frame = DurationHour, ids = Location))) +
+#   geom_point(data = tp4tile, aes(color = SwabPerDesk, size = SwabPerDesk, alpha = .5)) +
+#   scale_size(range = c(0, 12)) +
+#   scale_color_viridis_c(option = 'magma')
+# 
+# ggplotly(plot)
