@@ -6,17 +6,36 @@ library(gridExtra)
 library(plotly)
 library(GGally)
 
+## sets Google map for this session
+register_google(key = "AIzaSyD9z90fvzxmOhRzoNbxbwOmuIXI6CVKcTE")
+ggmap_hide_api_key()
+
 now <- Sys.time()
 now
 
-targetTime <- as.POSIXct("2022-06-19 15:23", "Asia/Taipei")
-targetTimeRound <- floor_date(targetTime, "30mins")
-# targetTimeRound <- now
+verMaster <- read_csv("data/version-master/version-master.csv", col_types = cols(StartTime = col_character(), EndTime = col_character()), quote="\"")
+versiondf <- filter(verMaster, CurrentFlag == 1)
+version <- versiondf %>% select(Version) %>% toString
+
+targetTime <- as.POSIXct(now, "Asia/Taipei")
+# targetTime <- as.POSIXct("2022-06-23 11:45", "Asia/Taipei")
+targetTimeRound <- floor_date(target1Time, "30mins")
+
+StartTimeStr <- versiondf %>% select(StartTime) %>% toString
+EndTimeStr <- versiondf %>% select(EndTime) %>% toString
+versionSt <- as.POSIXct(StartTimeStr, "Asia/Taipei")
+versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei")
+if (targetTime %within% interval(versionSt, versionEt)) {
+  versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
+}
+versionTi <- interval(versionSt, versionEt)
+versionTr <- seq(versionSt, versionEt, "30 mins")
+
+
 
 # dir('data/location-master', full.names=TRUE)
-locMaster <- read_csv("data/location-master/location-master-20220619.csv")
-locMaster
-
+locMaster <- read_csv(paste("data/location-master/location-master-",version,".csv", sep = ""))
+tail(locMaster,18)
 
 ### Loop to ingest all scraped data
 filelist <- dir('data/aptmon', full.names=TRUE)
@@ -25,10 +44,14 @@ scrp <- data.frame()
 for (file in filelist) {
   filetimestr <- sub(".csv", "",sub(".*-", "", file))
   filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
-  temp <- read.csv(file, na = "---")
-  temp$DateTime <- as.POSIXlt(filetime)
-  scrp <- rbind(scrp,as.data.frame(temp))
+  if(filetime %within% versionTi) {
+    temp <- read.csv(file, na = "---")
+    temp$DateTime <- as.POSIXlt(filetime)
+    scrp <- rbind(scrp,as.data.frame(temp))
+  }
 }
+
+# tail(scrp[order(scrp[,"DateTime"]),], 30)
 
 ### Date and time transformation
 attr(scrp$DateTime, "tzone") <- "Asia/Taipei"
@@ -70,47 +93,7 @@ station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>
 
 station <- station %>%
   complete(nesting(Location,序號,類別),
-           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 12:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 12:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 13:00", "Asia/Taipei"),
-                                      as.POSIXct("2022-06-19 13:30", "Asia/Taipei"),
-                                      by="30 min")
-  ) %>%
-  mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
-  arrange(Location,desc(DateTimeRound)) %>%
-  group_by(Location) %>%
-  fill(`DeskCount.mean`,`DeskCount.median`,
-       `口採樣點.mean`,`鼻採樣點.mean`,`口採樣點.median`,`鼻採樣點.median`,
-       `WaitingQueue.mean`,`WaitingMinutes.mean`,`WaitingQueue.median`,`WaitingMinutes.median`) %>%
-  mutate(DeskCount.ntile = ntile(DeskCount.mean, 5),
-         AvgDeskCount = median(DeskCount.mean)) %>%
-  ungroup() %>%
-  complete(nesting(Location,序號,類別),
-           DateTimeRound = seq.POSIXt(as.POSIXct("2022-06-19 17:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 17:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 18:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 18:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 21:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 21:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 22:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 22:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 23:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-19 23:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 01:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 08:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 09:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 09:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 10:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 10:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 11:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 11:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 12:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 13:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 14:30", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 15:00", "Asia/Taipei"),
-                                      # as.POSIXct("2022-06-20 21:00", "Asia/Taipei"),
-                                      as.POSIXct("2022-06-21 10:30", "Asia/Taipei"),
-                                      by="30 min")
+           DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
   arrange(Location,DateTimeRound) %>%
@@ -120,7 +103,20 @@ station <- station %>%
        `WaitingQueue.mean`,`WaitingMinutes.mean`,`WaitingQueue.median`,`WaitingMinutes.median`) %>%
   mutate(DeskCount.ntile = ntile(DeskCount.mean, 5),
          AvgDeskCount = median(DeskCount.mean)) %>%
+  ungroup() %>%
+  complete(nesting(Location,序號,類別),
+           DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
+  ) %>%
+  mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
+  arrange(Location,desc(DateTimeRound)) %>%
+  group_by(Location) %>%
+  fill(`DeskCount.mean`,`DeskCount.median`,
+       `口採樣點.mean`,`鼻採樣點.mean`,`口採樣點.median`,`鼻採樣點.median`,
+       `WaitingQueue.mean`,`WaitingMinutes.mean`,`WaitingQueue.median`,`WaitingMinutes.median`) %>%
+  mutate(DeskCount.ntile = ntile(DeskCount.mean, 5),
+         AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup()
+
 
 ### Inspect filled data via the complete process
 # filter(station, DateTimeRound == "2022-06-19 12:00")
@@ -129,20 +125,36 @@ station <- station %>%
 set1 <- merge(station, locMaster)
 
 
-
+fileTwr <- data.frame()
 filelist2 <- dir('data/RNA010', full.names=TRUE)
-file2 <- tail(filelist2, 1)
+for (file2 in filelist2) {
+  filetimestr2 <- sub(".xlsx", "",sub(".*-", "", file2))
+  filetime2 <- strptime(filetimestr2,"%Y%m%d%H%M%S")
+  if(filetime2 %within% versionTi) {
+    fileTwr <- rbind(fileTwr,as.data.frame(file2))
+  }
+}
+file2 <- tail(fileTwr, 1) %>% toString
 
-sheets <- c("20220619A","20220620A","20220621A")
+day1 <- as.Date(StartTimeStr)
+day2 <- as.Date(StartTimeStr)+1
+day3 <- as.Date(StartTimeStr)+2
+sheet1 <- paste(str_remove_all(day1,"-"),"A",sep="")
+sheet2 <- paste(str_remove_all(day2,"-"),"A",sep="")
+# sheet3 <- paste(str_remove_all(day3,"-"),"A",sep="")
+
+# sheets <- c(sheet1,sheet2,sheet3)
+sheets <- c(sheet1,sheet2)
+
 df <- data.frame()
 for (sheetname in sheets) {
-  #sheetname <- "20220619A"
+  #sheetname <- "20220623A"
   
   ### Extract first row for location list
   cnames <- read_excel(file2, sheet = sheetname, n_max = 0, na = "---") %>% names()
   lls1 <- sub(".*?-", "",cnames[seq(6, length(cnames), 3)])
   ### Extract data from 2nd row
-  rdf1 <- read_excel(file2, sheet=sheetname, na = "---", skip = ifelse(sheetname == "20220619A", 2, 1)) # skip 2 because there exists a hidden row 1 in this spreadsheet
+  rdf1 <- read_excel(file2, sheet=sheetname, na = "---", skip = ifelse(sheetname == sheet1, 2, 1)) # skip 2 because there exists a hidden row 1 in this spreadsheet
   ### Set date
   rdf1$SwabDate <- as.Date(strptime(str_remove(sheetname, "A"),"%Y%m%d"))
   rdf1$SwabTime <- substr(rdf1$預約時段,1,5)
@@ -179,10 +191,10 @@ booking <- pdf %>%
   mutate(AvgSwabCount = mean(SwabCount)) %>%
   ungroup() %>%
   mutate(
-    DurationHour = as.numeric((DateTimeRound - ymd_hms("2022-06-19 12:00:00", tz = "Asia/Taipei")),"hours"),
-    DurationDay = as.numeric((DateTimeRound - ymd_hms("2022-06-19 12:00:00", tz = "Asia/Taipei")),"days"),
-    DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms("2022-06-19 12:00:00", tz = "Asia/Taipei")),"days") + 1),
-    Status = ifelse(DateTimeRound <= Sys.time(), "Done", "Booked")
+    DurationHour = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"hours"),
+    DurationDay = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days"),
+    DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
+    Status = ifelse(DateTimeRound <= versionEt, "Done", "Booked")
   )
 str(booking)
 
@@ -213,7 +225,7 @@ throughput <- merge(mdf, locMaster)
 ## Basic checking
 
 sum(booking$SwabCount,na.rm = TRUE)
-sum(throughput$SwabCount,na.rm = TRUE)
+sum(throughput$SwabCount,na.rm = TRUE) / 540000
 
 # str(scrp)
 # str(station)
@@ -437,7 +449,7 @@ grid.arrange(sh2, sb2, nrow = 1, top = "Set of 4 locations from Cotai area in 3 
 tp4tile <- throughput %>% filter(SwabPerDesk.ntile == 4)
 
 plot <- ggmap(get_map(location = "taipa, macao", zoom = 12), darken = .5, 
-              base_layer = ggplot(data = p4, aes(x = lon, y = lat, frame = DurationHour, ids = Location))) +
+              base_layer = ggplot(data = tp4tile, aes(x = lon, y = lat, frame = DurationHour, ids = Location))) +
   geom_point(data = tp4tile, aes(color = SwabPerDesk, size = SwabPerDesk, alpha = .5)) +
   scale_size(range = c(0, 12)) +
   scale_color_viridis_c(option = "magma")
