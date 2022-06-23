@@ -428,7 +428,7 @@ st1 <- filter(throughput, Location %in% s1) %>%
   theme_minimal() +
   xlab("Hours in interval") + ylab("Throughput (number of swabs per counter)")
 
-grid.arrange(sb1, st1, nrow = 1, top = "Set of 4 locations from Macao area in 3 days")
+grid.arrange(sb1, st1, nrow = 1, top = "Set of 4 locations from Macao area")
 
 
 s2 <- c("北安客運碼頭","威尼斯人展覽館A、B、C館","澳門大學","奧林匹克體育中心室內體育館")
@@ -458,7 +458,7 @@ st2 <- filter(throughput, Location %in% s2) %>%
   theme_minimal() +
   xlab("Hours in interval") + ylab("Throughput (number of swabs per counter)")
 
-grid.arrange(sb2, st2, nrow = 1, top = "Set of 4 locations from Cotai area in 3 days")
+grid.arrange(sb2, st2, nrow = 1, top = "Set of 4 locations from Cotai area")
 
 
 
