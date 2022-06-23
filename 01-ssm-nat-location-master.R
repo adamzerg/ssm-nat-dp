@@ -8,10 +8,10 @@ ggmap_hide_api_key()
 
 # locationList <- dir('data/location-master', full.names=TRUE)
 # locationList
-
-locScrpZh <- read.csv("data/location-master/aptmon-location-chinese.csv", quote="\"")
-locScrpEn <- read_csv("data/location-master/aptmon-location-english.csv", quote="\"")
-locXlsx <- read_csv("data/location-master/RNA010-location.csv")
+version <- "20220623"
+locScrpZh <- read.csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
+locScrpEn <- read_csv(paste("data/location-master/aptmon-location-english-",version,".csv", sep = ""), quote="\"")
+locXlsx <- read_csv(paste("data/location-master/RNA010-location-",version,".csv", sep = ""))
 
 # view(locScrpZh)
 # view(locScrpEn)
@@ -45,9 +45,11 @@ locMaster.2$Location <- ifelse(is.na(locMaster.2$LocationChinese), locMaster.2$L
 # B29 鏡湖醫院禮堂
 # B30 科大體育館
 # B31 南粵青茂口岸
-locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "鏡湖醫院禮堂","Kiang Wu Hospital 3rd floor",locMaster.2$LocationEnglish)
-locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "科大體育館","Gymnasium at M.U.S.T",locMaster.2$LocationEnglish)
-locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "南粵青茂口岸","Namyue QingMao Port",locMaster.2$LocationEnglish)
+if (version == "20220619") {
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "鏡湖醫院禮堂","Kiang Wu Hospital Auditorium",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "科大體育館","Macao Science and Technology University Hospital Stadium",locMaster.2$LocationEnglish)
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "南粵青茂口岸","Nucleic acid detection station at Namyue QingMao Port",locMaster.2$LocationEnglish)
+}
 # Correction for English names
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "塔石體育館B館","Tap Seac Multisport Pavilion - Pavilion B",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "威尼斯人展覽館A、B、C館","The Venetian Macau Exhibition A B C",locMaster.2$LocationEnglish)
@@ -78,4 +80,4 @@ locMaster <- data.frame(locMaster.2[ , c("Sno", "Location", "LocationEnglish", "
 # view(locMaster)
 
 ## Export to csv
-write_csv(locMaster, "data/location-master/location-master-20220619.csv")
+write_csv(locMaster, paste("data/location-master/location-master-",version,".csv", sep = ""))

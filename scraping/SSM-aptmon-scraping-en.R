@@ -53,7 +53,3 @@ mybrowser$server$stop()
 
 system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE)
 system("taskkill /im geckodriver.exe /f", intern=FALSE, ignore.stdout=FALSE)
-
-#rm(mybrowser)
-#kill = 'for /f "tokens=5" %a in (\'netstat -aon ^| findstr ":4548" ^| findstr "LISTENING"\') do taskkill /f /pid %a'
-#shell(kill, ignore.stderr = TRUE, ignore.stdout = TRUE)

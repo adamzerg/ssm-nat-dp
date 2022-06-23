@@ -34039,3 +34039,3024 @@ Error in checkError(res) :
   Undefined error in httr call. httr output: length(url) == 1 is not TRUE
 Calls: <Anonymous> -> queryRD -> checkError
 Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+Creating directory: C:\Users\adam\AppData\Local/binman/binman_chromedrive...
+Downloading binary: https://www.googleapis.com/download/storage/v1/b/chro...
+
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 10628
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofile1gT4hR"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "cad0cbc6-f350-4851-9173-39d24944cf13"
+
+$id
+[1] "cad0cbc6-f350-4851-9173-39d24944cf13"
+
+
+Selenium message:Unable to locate element: #tblist
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '169.254.25.180', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+
+Error: 	 Summary: NoSuchElement
+ 	 Detail: An element could not be located on the page using the given search parameters.
+ 	 class: org.openqa.selenium.NoSuchElementException
+	 Further Details: run errorDetails method
+Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+
+Selenium message:Failed to read marionette port
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '192.168.1.211', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+remote stacktrace: 
+
+Could not open firefox browser.
+Client error message:
+	 Summary: Timeout
+ 	 Detail: An operation did not complete before its timeout expired.
+	 Further Details: run errorDetails method
+Check server log for further details.
+Error in checkError(res) : 
+  Undefined error in httr call. httr output: length(url) == 1 is not TRUE
+Calls: <Anonymous> -> queryRD -> checkError
+Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 9636
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileZGWMcF"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "57ad3d86-55d0-46d8-b5a0-2bf48062daee"
+
+$id
+[1] "57ad3d86-55d0-46d8-b5a0-2bf48062daee"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 11592 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 14592
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilezl5kGs"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "721fa3ac-e2b0-442a-bbaf-0120e0b1feed"
+
+$id
+[1] "721fa3ac-e2b0-442a-bbaf-0120e0b1feed"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 17116 has been terminated.
+SUCCESS: The process "java.exe" with PID 15048 has been terminated.
+[1] 0
+SUCCESS: The process "geckodriver.exe" with PID 3544 has been terminated.
+[1] 0
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+
+Selenium message:Process unexpectedly closed with status 0
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '192.168.1.211', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+remote stacktrace: 
+
+Could not open firefox browser.
+Client error message:
+	 Summary: UnknownError
+ 	 Detail: An unknown server-side error occurred while processing the command.
+	 Further Details: run errorDetails method
+Check server log for further details.
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 16240
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilejPhS69"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "ffb717ba-dbe9-4629-aa3c-5816549067fa"
+
+$id
+[1] "ffb717ba-dbe9-4629-aa3c-5816549067fa"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 14048 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 10496
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofile5PzxMq"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "51e85417-f8bd-482d-916a-6ebacf65da8b"
+
+$id
+[1] "51e85417-f8bd-482d-916a-6ebacf65da8b"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 9032 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 4264
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilev110Rx"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "d5f121e8-e9fb-47f2-ae7c-aec8e02fc7dc"
+
+$id
+[1] "d5f121e8-e9fb-47f2-ae7c-aec8e02fc7dc"
+
+
+Selenium message:Unable to locate element: #tblist
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '192.168.1.211', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+
+Error: 	 Summary: NoSuchElement
+ 	 Detail: An element could not be located on the page using the given search parameters.
+ 	 class: org.openqa.selenium.NoSuchElementException
+	 Further Details: run errorDetails method
+Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 3180
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileHyBKla"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "a4166336-c97f-4822-8fcd-8bcf018e8147"
+
+$id
+[1] "a4166336-c97f-4822-8fcd-8bcf018e8147"
+
+
+Selenium message:Unable to locate element: #tblist
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '192.168.1.211', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+
+Error: 	 Summary: NoSuchElement
+ 	 Detail: An element could not be located on the page using the given search parameters.
+ 	 class: org.openqa.selenium.NoSuchElementException
+	 Further Details: run errorDetails method
+Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 14668
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofile0H6m97"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "2c1ad2dc-07bd-4337-861e-e2f8b9cce4cc"
+
+$id
+[1] "2c1ad2dc-07bd-4337-861e-e2f8b9cce4cc"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 5576 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 3036
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilecx3iF3"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "c8e03253-84f2-466c-881c-db29cae308ab"
+
+$id
+[1] "c8e03253-84f2-466c-881c-db29cae308ab"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 16628 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 13016
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileHYg6RV"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "f4f19e47-a331-498d-a596-1fd01c3a953a"
+
+$id
+[1] "f4f19e47-a331-498d-a596-1fd01c3a953a"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 17544 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 12788
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilew0XYgr"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "420c3310-c54b-4bcf-ac08-772118a7d2b1"
+
+$id
+[1] "420c3310-c54b-4bcf-ac08-772118a7d2b1"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 17508 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 15208
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileb24Z1N"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "4bbf4816-2475-4786-b84f-a072edfa8533"
+
+$id
+[1] "4bbf4816-2475-4786-b84f-a072edfa8533"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 14964 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 8396
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileiZwhgj"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "b03ff7e6-9673-4b0e-a05e-c757c3eb26a6"
+
+$id
+[1] "b03ff7e6-9673-4b0e-a05e-c757c3eb26a6"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 1176 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 14192
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileAFPbFB"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "6b3519f6-7f58-42cb-8a21-83f929bc620c"
+
+$id
+[1] "6b3519f6-7f58-42cb-8a21-83f929bc620c"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 17888 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 16228
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileBl6TxE"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "20e85e51-2684-472e-a36e-bfa9c3a1a6d4"
+
+$id
+[1] "20e85e51-2684-472e-a36e-bfa9c3a1a6d4"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 5192 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 14676
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofile597UXP"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "553aa200-f609-455e-bff9-7b94770e87a4"
+
+$id
+[1] "553aa200-f609-455e-bff9-7b94770e87a4"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 5400 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 3140
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileBRguoh"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "b4cbdc62-9654-4fe9-b9b7-d17734ac7a9a"
+
+$id
+[1] "b4cbdc62-9654-4fe9-b9b7-d17734ac7a9a"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 5380 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 2468
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileT3nZjL"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "086331f8-5aaf-4462-8424-b7ff55e3396d"
+
+$id
+[1] "086331f8-5aaf-4462-8424-b7ff55e3396d"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 1556 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 14000
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilehLabMb"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "6e3c0407-f653-4e34-8b55-90f324270860"
+
+$id
+[1] "6e3c0407-f653-4e34-8b55-90f324270860"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 11156 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 13708
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileFJZXRr"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "ffce8c98-d68d-4d8c-9451-b9006145cac3"
+
+$id
+[1] "ffce8c98-d68d-4d8c-9451-b9006145cac3"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 6848 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 7560
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileR2GCad"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "9e928a64-a234-41aa-8d66-67999ccb489d"
+
+$id
+[1] "9e928a64-a234-41aa-8d66-67999ccb489d"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 1700 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+
+Selenium message:Failed to read marionette port
+Build info: version: '4.0.0-alpha-2', revision: 'f148142cf8', time: '2019-07-01T21:30:10'
+System info: host: 'ADAMZERG', ip: '192.168.1.211', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_333'
+Driver info: driver.version: unknown
+remote stacktrace: 
+
+Could not open firefox browser.
+Client error message:
+	 Summary: Timeout
+ 	 Detail: An operation did not complete before its timeout expired.
+	 Further Details: run errorDetails method
+Check server log for further details.
+Error in checkError(res) : 
+  Undefined error in httr call. httr output: length(url) == 1 is not TRUE
+Calls: <Anonymous> -> queryRD -> checkError
+Execution halted
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 17520
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofilegyQNTa"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "f5d16f15-172f-450a-ae57-cf7b43a720fa"
+
+$id
+[1] "f5d16f15-172f-450a-ae57-cf7b43a720fa"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 8584 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 8788
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileowA22m"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "1aa21aad-3a26-4699-a3cb-28a1aa289940"
+
+$id
+[1] "1aa21aad-3a26-4699-a3cb-28a1aa289940"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 10536 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
+
+Attaching package: 'httpuv'
+
+The following object is masked from 'package:RSelenium':
+
+    startServer
+
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:data.table':
+
+    between, first, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+checking Selenium Server versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking chromedriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking geckodriver versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+checking phantomjs versions:
+BEGIN: PREDOWNLOAD
+BEGIN: DOWNLOAD
+BEGIN: POSTDOWNLOAD
+[1] "Connecting to remote server"
+$acceptInsecureCerts
+[1] FALSE
+
+$browserName
+[1] "firefox"
+
+$browserVersion
+[1] "101.0.1"
+
+$`moz:accessibilityChecks`
+[1] FALSE
+
+$`moz:buildID`
+[1] "20220608170832"
+
+$`moz:geckodriverVersion`
+[1] "0.31.0"
+
+$`moz:headless`
+[1] FALSE
+
+$`moz:processID`
+[1] 11404
+
+$`moz:profile`
+[1] "C:\\Users\\adam\\AppData\\Local\\Temp\\rust_mozprofileYwg5kN"
+
+$`moz:shutdownTimeout`
+[1] 60000
+
+$`moz:useNonSpecCompliantPointerOrigin`
+[1] FALSE
+
+$`moz:webdriverClick`
+[1] TRUE
+
+$pageLoadStrategy
+[1] "normal"
+
+$platformName
+[1] "windows"
+
+$platformVersion
+[1] "10.0"
+
+$proxy
+named list()
+
+$setWindowRect
+[1] TRUE
+
+$strictFileInteractability
+[1] FALSE
+
+$timeouts
+$timeouts$implicit
+[1] 0
+
+$timeouts$pageLoad
+[1] 300000
+
+$timeouts$script
+[1] 30000
+
+
+$unhandledPromptBehavior
+[1] "dismiss and notify"
+
+$webdriver.remote.sessionid
+[1] "3535511f-9891-4427-b75a-becb008ffaa8"
+
+$id
+[1] "3535511f-9891-4427-b75a-becb008ffaa8"
+
+[1] TRUE
+SUCCESS: The process "java.exe" with PID 16696 has been terminated.
+[1] 0
+ERROR: The process "geckodriver.exe" not found.
+[1] 128
