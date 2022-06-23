@@ -1,5 +1,5 @@
 .RData
 .Rhistory
+*.log
 data/
 ssm-info-site/*.pdf
-scraping/*.log
