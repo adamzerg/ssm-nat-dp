@@ -192,7 +192,7 @@ booking <- pdf %>%
     DurationHour = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"hours"),
     DurationDay = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days"),
     DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
-    Status = ifelse(DateTimeRound <= versionEt, "已完成", "預約中")
+    Status = ifelse(DateTimeRound <= versionEt, "2.已完成", "1.預約中")
   )
 str(booking)
 
@@ -241,10 +241,9 @@ totalSwabBooking <- sum(booking$SwabCount,na.rm = TRUE)
 totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
 
 ## Start plotting
-tail(p1)
 options("scipen" = 100, "digits" = 4)
 
-p1 <- df %>% mutate(Status = ifelse(as.POSIXlt(paste(df$SwabDate, df$SwabTime)) <= versionEt, "已完成", "預約中")) %>%
+p1 <- df %>% mutate(Status = ifelse(as.POSIXlt(paste(df$SwabDate, df$SwabTime)) <= versionEt, "2.已完成", "1.預約中")) %>%
   group_by(variable, Status) %>%
   summarise(value.sum = sum(value, na.rm = TRUE))
 p2 <- set2 %>% group_by(area, Status) %>% tally(SwabCount)
@@ -336,7 +335,7 @@ g5 <- ggplot(p5, aes(x = reorder(Location, n), y = n, fill = Status)) +
   scale_fill_viridis_d(name = "Day", option = 'magma') +
   theme_minimal() +
   xlab("採樣站") + ylab("總計數") +
-  ggtitle("採樣站已完成及預約中總計數")
+  ggtitle("採樣站已完成及預約中總計數(預約中佔比較少為佳)")
   
 p6 <- set1 %>% filter(Location %in% areaSet)
 
@@ -346,7 +345,7 @@ g6 <- ggplot(p6, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fi
   scale_fill_viridis_c(option = 'magma', direction = -1) +
   theme_minimal() +
   xlab("採樣站") + ylab("可採樣點數目") +
-  ggtitle("採樣站可採樣點中位數")
+  ggtitle("採樣站可採樣點中位數(較高為佳)")
 
 # grid.arrange(g5, g6, ncol = 2, top = paste("Number of swab counters by location as of", targetTimeRound, sep = " "))
 
@@ -420,7 +419,7 @@ sb0 <- filter(set2, Location %in% areaSet) %>%
   facet_wrap(~Location, ncol = 1) +
   theme_minimal() +
   xlab("每小時") + ylab("總計數") +
-  ggtitle("採樣站已完成及預約中總計數")
+  ggtitle("採樣站已完成及預約數每小時變化")
 
 # sh0 <- filter(tp, Location %in% areaSet) %>%
 #   ggplot(aes(DateTimeRound, variable)) +
@@ -438,7 +437,7 @@ st0 <- filter(throughput, Location %in% areaSet) %>%
   facet_wrap(~Location, ncol = 1) +
   theme_minimal() +
   xlab("每小時") + ylab("吞吐量") +
-  ggtitle("採樣站吞吐量即每採樣點半小時採樣數")
+  ggtitle("採樣站吞吐量(即每採樣點每半小時採樣數)")
 
 # grid.arrange(sb0, st0, nrow = 1, top = "Set of 4 locations from Macao area")
 
@@ -447,8 +446,8 @@ png(paste("Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep = ""),
 grid.arrange(layout_matrix = rbind(c(1,2), c(3,4), c(5,5), c(6,6)), g3, g2, g5, g6, sb0, st0, ncol = 2,
 top = textGrob(paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
           ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
-          , "\n數據基於現在時間 ", targetTimeRound, " 以下統整為",setArea,"區", sep = ""), gp=gpar(fontsize=24,font=8)),
-bottom = textGrob(paste("* 數據來源官方但由民間統計整理，可能有延遲。 ** 各地區取吞吐量最低三個檢測站作顯示，僅供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
+          , " 數據基於現在時間 ", targetTimeRound, "\n以下統整為",setArea,"區，僅取該區單採樣點最低吞吐量三採樣站", sep = ""), gp=gpar(fontsize=24,font=8)),
+bottom = textGrob(paste("* 數據來源官方但由民間統計整理，可能有延遲。 ** 各地區僅選取最低吞吐量三個採樣站，供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
 dev.off()
 }
 

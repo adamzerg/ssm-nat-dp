@@ -16,3 +16,4 @@ taskscheduler_create(
   Rexe = file.path(Sys.getenv("R_HOME"),"bin","Rscript.exe")
 )
 
+setwd("D:/Documents/GitHub/ssm-nat-dp")
