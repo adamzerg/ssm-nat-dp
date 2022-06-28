@@ -1,6 +1,6 @@
 .RData
 .Rhistory
 *.log
-archive/
 data/
+plot/
 ssm-info-site/*.pdf

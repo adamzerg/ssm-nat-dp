@@ -441,7 +441,7 @@ st0 <- filter(throughput, Location %in% areaSet) %>%
 
 # grid.arrange(sb0, st0, nrow = 1, top = "Set of 4 locations from Macao area")
 
-png(paste("Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep = ""), width = 1200, height = 2000, res = 100)
+png(paste("plot/Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep = ""), width = 1200, height = 2000, res = 100)
 # grid.arrange(g1, g3, g2, g4, g6, g8, sb1, st1, sb2, st2, ncol = 2,
 grid.arrange(layout_matrix = rbind(c(1,2), c(3,4), c(5,5), c(6,6)), g3, g2, g5, g6, sb0, st0, ncol = 2,
 top = textGrob(paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)

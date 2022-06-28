@@ -9,9 +9,9 @@ taskscheduler_delete("r_infochart_png")
 
 taskscheduler_create(
   taskname = "r_infochart_png",
-  rscript = "D:\\Documents\\GitHub\\ssm-nat-dp\\02-ssm-nat-dp.R",
+  rscript = "D:\\Documents\\GitHub\\ssm-nat-dp\\cron-job\\cronR-infochart-png.R",
   schedule = "MINUTE",
-  starttime = format(Sys.time() + 62, "%H:%M"),
+  starttime = format(Sys.time() + 302, "%H:%M"),
   startdate = format(Sys.Date(), "%Y-%m-%d"),
   Rexe = file.path(Sys.getenv("R_HOME"),"bin","Rscript.exe")
 )

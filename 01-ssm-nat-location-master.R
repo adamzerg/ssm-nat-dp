@@ -8,7 +8,7 @@ ggmap_hide_api_key()
 
 # locationList <- dir('data/location-master', full.names=TRUE)
 # locationList
-version <- "20220623"
+version <- "20220627"
 locScrpZh <- read.csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
 locScrpEn <- read_csv(paste("data/location-master/aptmon-location-english-",version,".csv", sep = ""), quote="\"")
 locXlsx <- read_csv(paste("data/location-master/RNA010-location-",version,".csv", sep = ""))
@@ -58,13 +58,13 @@ locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "工人體育場�
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "街總石排灣家庭及社區綜合服務中心","Seac Pai Van Family Support and Community Service Center",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "街坊會聯合總會社區服務大樓","Community Services Building of the General Union of Neighbourhood",locMaster.2$LocationEnglish)
 locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "中葡職業技術學校體育館","Indoor Sports Facilities at the Luso-Chinese Middle School",locMaster.2$LocationEnglish)
-
+locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "澳門街坊會聯合總會綠楊長者日間護理中心","Lok Yeung Day Care Centre",locMaster.2$LocationEnglish)
 # str(locMaster.2)
 # view(locMaster.2)
 
 ## Prepare for Location adding lon and lat
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大醫院","Macao, University Hospital",locMaster.2$Location)
-locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大體育館","Macao, 澳門科技大學室內體育館 Gymnasium",locMaster.2$MapLoc)
+locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大體育館","Gymnasium, Macao",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "街總石排灣家庭及社區綜合服務中心","Macao, 石排灣業興大廈",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "沙梨頭活動中心","沙梨頭街市",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "培正中學","澳門培正中學",locMaster.2$MapLoc)

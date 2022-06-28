@@ -9,9 +9,9 @@ taskscheduler_delete("r_xlsx_scraping_RNA010")
 
 taskscheduler_create(
   taskname = "r_xlsx_scraping_RNA010",
-  rscript = "D:\\Documents\\GitHub\\ssm-nat-dp\\scraping\\SSM-RNA010-download.R",
+  rscript = "D:\\Documents\\GitHub\\ssm-nat-dp\\cron-job\\SSM-RNA010-download.R",
   schedule = "MINUTE",
-  starttime = format(Sys.time() + 62, "%H:%M"),
+  starttime = format(Sys.time() + 302, "%H:%M"),
   startdate = format(Sys.Date(), "%Y-%m-%d"),
   Rexe = file.path(Sys.getenv("R_HOME"),"bin","Rscript.exe")
 )
