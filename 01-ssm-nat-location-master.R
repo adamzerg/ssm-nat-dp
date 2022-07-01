@@ -65,18 +65,27 @@ locMaster.2$LocationEnglish <- ifelse(locMaster.2$Location == "澳門街坊會�
 # view(locMaster.2)
 
 ## Prepare for Location adding lon and lat
+# locMaster.2[grep("工人體育.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Campo dos Operários da Associação Geral dos Operários de Macau"
+# locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大體育館","Gymnasium, Macao",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大醫院","Macao, University Hospital",locMaster.2$Location)
-locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "科大體育館","Gymnasium, Macao",locMaster.2$MapLoc)
+locMaster.2[grep("威尼斯人.*", locMaster.2$Location, perl=T), ]$MapLoc <- "澳門威尼斯人"
+locMaster.2[grep("威尼斯人展覽館.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Cotai Expo"
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "街總石排灣家庭及社區綜合服務中心","Macao, 石排灣業興大廈",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "沙梨頭活動中心","沙梨頭街市",locMaster.2$MapLoc)
 locMaster.2$MapLoc <- ifelse(locMaster.2$Location == "培正中學","澳門培正中學",locMaster.2$MapLoc)
 locMaster.2[grep("奧林匹克體育中心.*", locMaster.2$Location, perl=T), ]$MapLoc <- "奧林匹克體育中心"
 locMaster.2[grep(".*湖畔", locMaster.2$Location, perl=T), ]$MapLoc <- "Edifício do Lago, Macao"
-locMaster.2[grep("工人體育.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Campo dos Operários da Associação Geral dos Operários de Macau"
 locMaster.2[grep("望廈體育中心.*", locMaster.2$Location, perl=T), ]$MapLoc <- "望廈體育中心 Centro Desportivo Mong-Há"
-locMaster.2[grep("南粵青茂口岸.*", locMaster.2$Location, perl=T), ]$MapLoc <- "Edifício Posto Fronteiriço de Macau do Posto Fronteiriço Qingmao"
-locMaster.2[grep("威尼斯人.*", locMaster.2$Location, perl=T), ]$MapLoc <- "澳門威尼斯人"
+locMaster.2[grep("南粵青茂口岸.*", locMaster.2$Location, perl=T), ]$MapLoc <- "青茂口岸澳門邊檢大樓"
+
 locMaster.2 <- mutate_geocode(locMaster.2, MapLoc)
+locMaster.2$lon <- ifelse(locMaster.2$Location == "科大體育館",113.56995461502227,locMaster.2$lon)
+locMaster.2$lat <- ifelse(locMaster.2$Location == "科大體育館",22.152543365748826,locMaster.2$lat)
+locMaster.2$lon <- ifelse(locMaster.2$Location == "工人體育場一樓",113.54803478442068,locMaster.2$lon)
+locMaster.2$lat <- ifelse(locMaster.2$Location == "工人體育場一樓",22.214929340569142,locMaster.2$lat)
+locMaster.2$lon <- ifelse(locMaster.2$Location == "工人體育館",113.54719122064877,locMaster.2$lon)
+locMaster.2$lat <- ifelse(locMaster.2$Location == "工人體育館",22.215340007111248,locMaster.2$lat)
+
 locMaster.2$area <- ifelse(locMaster.2$lat<=22.145,"路環",
                         ifelse(locMaster.2$lat<=22.17,"氹仔",
                         ifelse(locMaster.2$lat<=22.197,"半島南",
