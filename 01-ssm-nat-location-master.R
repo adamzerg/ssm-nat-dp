@@ -1,9 +1,11 @@
 
 library(tidyverse)
 library(ggmap)
+library(jsonlite)
 
 ## sets Google map for this session
-register_google(key = "AIzaSyD9z90fvzxmOhRzoNbxbwOmuIXI6CVKcTE")
+google_map_key <- fromJSON("keys.json")$google_map_key
+register_google(google_map_key)
 ggmap_hide_api_key()
 
 # locationList <- dir('data/location-master', full.names=TRUE)

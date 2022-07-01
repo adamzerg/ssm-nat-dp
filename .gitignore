@@ -1,5 +1,6 @@
 .RData
 .Rhistory
+keys.json
 *.log
 data/
 plot/
