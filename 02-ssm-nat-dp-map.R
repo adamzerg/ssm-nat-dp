@@ -297,7 +297,7 @@ addCircleMarkers(data = leaf, lng = ~lon, lat = ~lat,
                     # "<br>鼻咽拭數 / Nasal swab:", 鼻咽拭,
                     "<br>口採樣點 / Counters of mouth swab :", 口採樣點.median,
                     "<br>鼻採樣點 / Counters of nasal swab:", 鼻採樣點.median,
-                    "<br>每採樣枱等待時長 / Per counter waiting time:", round(SwabPerDesk),
+                    "<br>每採樣枱等待人数 / Per counter waiting people:", round(SwabPerDesk),
                     "<br>每採樣枱待時級別 / Per counter waiting level:", SwabPerDesk.ntile
                     # "<br>平均採樣 / Overall average", round(AvgSwabCount, digits = 2),
                     ),
