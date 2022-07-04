@@ -10,12 +10,16 @@ ggmap_hide_api_key()
 
 # locationList <- dir('data/location-master', full.names=TRUE)
 # locationList
-version <- "20220627"
-locScrpZh <- read.csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
+
+# Update version HEREbefore you RUN!!!
+version <- "20220704"
+locScrpZh <- read_csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
 locScrpEn <- read_csv(paste("data/location-master/aptmon-location-english-",version,".csv", sep = ""), quote="\"")
 locXlsx <- read_csv(paste("data/location-master/RNA010-location-",version,".csv", sep = ""))
 
-# view(locScrpZh)
+# correction for the newline \n
+locScrpZh <- locScrpZh %>% mutate(LocationChinese = str_replace_all(LocationChinese, "\\\\n", "\n"))
+
 # view(locScrpEn)
 # view(locXlsx)
 

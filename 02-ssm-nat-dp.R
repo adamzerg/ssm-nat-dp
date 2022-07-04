@@ -1,5 +1,6 @@
 
 library(lubridate)
+library(data.table)
 library(readxl)
 library(tidyverse)
 library(grid)
@@ -14,8 +15,9 @@ verMaster <- read_csv("data/version-master/version-master.csv", col_types = cols
 versiondf <- filter(verMaster, CurrentFlag == 1)
 version <- versiondf %>% select(Version) %>% toString
 
+# SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-# targetTime <- as.POSIXct("2022-06-23 11:45", "Asia/Taipei")
+# targetTime <- as.POSIXct("2022-06-28 17:21", "Asia/Taipei")
 targetTimeRound <- floor_date(targetTime, "30mins")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
@@ -33,7 +35,8 @@ versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv(paste("data/location-master/location-master-",version,".csv", sep = ""))
-# tail(locMaster,18)
+# print(locMaster, n=70)
+
 
 ### Loop to ingest all scraped data
 filelist <- dir('data/aptmon', full.names=TRUE)
@@ -146,11 +149,12 @@ sheets <- c(sheet1,sheet2)
 
 df <- data.frame()
 for (sheetname in sheets) {
-  #sheetname <- "20220623A"
+  # sheetname <- "20220704A"
   
   ### Extract first row for location list
   cnames <- read_excel(file2, sheet = sheetname, n_max = 0, na = "---") %>% names()
-  lls1 <- sub(".*?-", "",cnames[seq(6, length(cnames), 3)])
+  cn1 <- cnames[seq(6, length(cnames))]
+  lls1 <- sub(".*?-", "",cn1[grepl("^[^...*]", cn1)])
   ### Extract data from 2nd row
   rdf1 <- read_excel(file2, sheet=sheetname, na = "---", skip = ifelse(sheetname == sheet1, 2, 1)) # skip 2 because there exists a hidden row 1 in this spreadsheet
   ### Set date
@@ -159,7 +163,9 @@ for (sheetname in sheets) {
   ### select columns and rows
   sdf1 <- rdf1 %>% select(c(6:ncol(rdf1))) %>% slice(2:nrow(rdf1)) %>% select(-contains("總人次"))
   ### Repeat Location info for number of rows
-  Location <- rep(lls1, each = nrow(sdf1) * 2)
+  dtls <- as.data.table(lls1)
+  setnames(dtls, "lls1", "Location")
+  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
   ### Melt to pivot
   sdf1 <- as.data.frame(sdf1)
   mdf1 <- reshape::melt(sdf1, id = c("SwabDate", "SwabTime"))
@@ -170,6 +176,7 @@ for (sheetname in sheets) {
   df <- rbind(df,as.data.frame(df1))
 }
 
+#df %>% filter(Location %like% '流動核酸採樣車')
 
 pdf <- df %>% pivot_wider(names_from = variable, values_from = value)
 pdf <- as.data.frame(pdf)
@@ -183,6 +190,9 @@ pdf$HourNumber <-
            x[1]+x[2]/60
          }
   )
+
+# pdf %>% filter(Location %like% '流動核酸採樣車')
+
 
 booking <- pdf %>%
   group_by(Location) %>%
@@ -209,6 +219,12 @@ mdf <- mdf %>%
     SwabPerDesk = mdf$SwabCount / ifelse(is.na(mdf$DeskCount.mean) | mdf$DeskCount.mean == 0, 1,
                                          mdf$DeskCount.mean),
     SwabPerDesk.ntile = ntile(SwabPerDesk, 4),
+    SwabPerDesk.color = case_when(SwabPerDesk.ntile == 4 ~ "coral",
+                                SwabPerDesk.ntile == 3 ~ "goldenrod",
+                                SwabPerDesk.ntile == 2 ~ "steelblue",
+                                SwabPerDesk.ntile == 1 ~ "seagreen",
+                                TRUE ~ "chocolate"
+                                ),
     MouthPerDesk = mdf$口咽拭 / ifelse(is.na(mdf$口採樣點.mean) | mdf$口採樣點.mean == 0 , 1,
                                     mdf$口採樣點.mean),
     NosePerDesk = mdf$鼻咽拭 / ifelse(is.na(mdf$鼻採樣點.mean) | mdf$鼻採樣點.mean == 0, 1,
@@ -222,6 +238,17 @@ throughput <- merge(mdf, locMaster)
 
 ## Basic checking
 
+# mdf %>% group_by(SwabPerDesk.ntile) %>%
+#       summarise(minSwabPerDesk = min(SwabPerDesk),
+#                 maxSwabPerDesk = max(SwabPerDesk)) %>%
+#       print(n=70)
+# 
+# mdf %>% group_by(SwabPerDesk.ntile) %>% summarise(count = n_distinct(Location)) %>% print(n=70)
+
+# locMaster %>% print(n=70)
+# station %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# booking %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+
 # str(scrp)
 # str(station)
 # str(set1)
@@ -233,7 +260,10 @@ throughput <- merge(mdf, locMaster)
 # str(mdf)
 # str(throughput)
 
-# head(throughput[order(throughput[,"DateTimeRound"]),], 30)
+# head(throughput[order(throughput[,"DateTimeRound"]),], 60)
+
+# set1 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# set2 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
 
 
 
