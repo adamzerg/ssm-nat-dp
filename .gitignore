@@ -2,6 +2,7 @@
 .Rhistory
 keys.json
 *.log
+cicd/
 data/
 plot/
 ssm-info-site/*.pdf
