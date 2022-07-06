@@ -14,6 +14,9 @@ library(leaflet)
 library(htmlwidgets)
 library(htmltools)
 
+
+
+### Set time, version, hence pick location master data
 now <- Sys.time()
 
 verMaster <- read_csv("data/version-master/version-master.csv", col_types = cols(StartTime = col_character(), EndTime = col_character()), quote="\"")
@@ -22,8 +25,7 @@ version <- versiondf %>% select(Version) %>% toString
 
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-# targetTime <- as.POSIXct("2022-06-28 17:21", "Asia/Taipei")
-targetTimeRound <- floor_date(targetTime, "30mins")
+# targetTime <- as.POSIXct("2022-07-05 17:48", "Asia/Taipei")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
@@ -32,18 +34,19 @@ versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei")
 if (targetTime %within% interval(versionSt, versionEt)) {
   versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
 }
+versionEtRound <- floor_date(versionEt, "30mins")
 versionTi <- interval(versionSt, versionEt)
 versionTr <- seq(versionSt, versionEt, "30 mins")
 
 versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
-
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv(paste("data/location-master/location-master-",version,".csv", sep = ""))
 # print(locMaster, n=70)
 
 
-### Loop to ingest all scraped data
+
+### Loop to ingest all scraped data fallen within the version interval
 filelist <- dir('data/aptmon', full.names=TRUE)
 
 scrp <- data.frame()
@@ -131,6 +134,7 @@ station <- station %>%
 set1 <- merge(station, locMaster)
 
 
+### Locate for booking data
 fileTwr <- data.frame()
 filelist2 <- dir('data/RNA010', full.names=TRUE)
 for (file2 in filelist2) {
@@ -152,6 +156,7 @@ sheet2 <- paste(str_remove_all(day2,"-"),"A",sep="")
 # sheets <- c(sheet1,sheet2,sheet3)
 sheets <- c(sheet1,sheet2)
 
+### Loop to ingest for all sheets
 df <- data.frame()
 for (sheetname in sheets) {
   # sheetname <- "20220704A"
@@ -216,7 +221,7 @@ set2 <- merge(booking, locMaster)
 
 # str(set2)
 
-
+### Combine for bookings and station data into throughput dataframe
 mdf <- merge(booking, station, by = c("Location", "DateTimeRound","HourNumber")) #, all.x=TRUE)
 mdf <- mdf %>%
   mutate(
@@ -240,8 +245,9 @@ mdf <- mdf %>%
 
 throughput <- merge(mdf, locMaster)
 
+print("Log: step 1 data preparation succeeded")
 
-## Basic checking
+### Basic validations
 
 # mdf %>% group_by(SwabPerDesk.ntile) %>%
 #       summarise(minSwabPerDesk = min(SwabPerDesk),
@@ -270,13 +276,14 @@ throughput <- merge(mdf, locMaster)
 # set1 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
 # set2 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
 
-print("Data frame prepare succeeded")
 
+
+### Start generate for map html with leaflet
 totalSwabBooking <- sum(booking$SwabCount,na.rm = TRUE)
 totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
 mapTitle <- paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
           ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
-          , " 數據基於現在時間 ", targetTime, sep = "")
+          , " 數據基於現在時間 ", versionEt, sep = "")
 tag.map.title <- tags$style(HTML("
   .leaflet-control.map-title {
     transform: translate(-50%,20%);
@@ -296,7 +303,7 @@ title <- tags$div(
 )
 
 
-leaf <- throughput %>% filter(DateTimeRound == targetTimeRound & SwabCount > 0)
+leaf <- throughput %>% filter(DateTimeRound == versionEtRound & SwabCount > 0)
 
 colorlabel <- unique(leaf[c("SwabPerDesk.ntile", "SwabPerDesk.color")]) %>%
             mutate(WaitingLevel = case_when(SwabPerDesk.ntile == 4 ~ "逼迫 / Max",
@@ -332,4 +339,4 @@ addControl(title, position = "topleft", className = "map-title")
 
 saveWidget(locMap, title = "Macau All People Nucleic Acid Testing", file = "macau-all-people-nat.html")
 
-print("Map generated succeeded")
+print("Log: step 2 map generated succeeded")
