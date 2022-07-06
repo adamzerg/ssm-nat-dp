@@ -93,7 +93,7 @@ locMaster.2$lat <- ifelse(locMaster.2$Location == "工人體育場一樓",22.214
 locMaster.2$lon <- ifelse(locMaster.2$Location == "工人體育館",113.54719122064877,locMaster.2$lon)
 locMaster.2$lat <- ifelse(locMaster.2$Location == "工人體育館",22.215340007111248,locMaster.2$lat)
 
-locMaster.2$area <- ifelse(locMaster.2$lat<=22.145,"路環",
+locMaster.2$area <- ifelse(locMaster.2$lat<=22.143,"路環",
                         ifelse(locMaster.2$lat<=22.17,"氹仔",
                         ifelse(locMaster.2$lat<=22.197,"半島南",
                         "半島北")))
