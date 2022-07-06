@@ -48,14 +48,17 @@ locMaster <- read_csv(paste("data/location-master/location-master-",version,".cs
 
 ### Loop to ingest all scraped data fallen within the version interval
 filelist <- dir('data/aptmon', full.names=TRUE)
+tailfile <- tail(filelist, 1)
 
 scrp <- data.frame()
 for (file in filelist) {
-  filetimestr <- sub(".csv", "",sub(".*-", "", file))
+  filetimestr <- sub(".csv", "", sub(".*-", "", file))
   filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
+  tailfileflag <- ifelse(file == tailfile, 1, 0)
   if(filetime %within% versionTi) {
     temp <- read.csv(file, na = "---")
     temp$DateTime <- as.POSIXlt(filetime)
+    temp$CurrentFlag <- tailfileflag
     scrp <- rbind(scrp,as.data.frame(temp))
   }
 }
@@ -66,12 +69,11 @@ for (file in filelist) {
 attr(scrp$DateTime, "tzone") <- "Asia/Taipei"
 scrp$DateTimeRound <- floor_date(scrp$DateTime, "30mins")
 scrp$WaitingQueue <- as.numeric(as.character(sub("*人", "", scrp$輪候人數)))
-scrp$WaitingMinutes <- as.numeric(as.character(sub("分鐘", "",sub(".*>", "", scrp$等候時間))))
+scrp$WaitingMinutes <- as.numeric(as.character(sub("分鐘", "",sub(".*>", "", scrp$等候時間.1))))
 scrp$口採樣點 = as.numeric(scrp$口採樣點)
 scrp$鼻採樣點 = as.numeric(scrp$鼻採樣點)
 scrp$DeskCount <- rowSums(scrp[ ,c("口採樣點", "鼻採樣點")], na.rm=TRUE)
-scrp$HourNumber <- 
-  sapply(strsplit(substr(scrp$DateTimeRound,12,16),":"),
+scrp$HourNumber <- sapply(strsplit(substr(scrp$DateTimeRound,12,16),":"),
          function(x) {
            x <- as.numeric(x)
            x[1]+x[2]/60
@@ -92,12 +94,15 @@ station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>
     WaitingMinutes.mean = mean(WaitingMinutes, na.rm = TRUE),
     WaitingQueue.median = median(WaitingQueue, na.rm = TRUE),
     WaitingMinutes.median = median(WaitingMinutes, na.rm = TRUE),
+    WaitingQueue.current = max(ifelse(CurrentFlag == 1, WaitingQueue, 0)),
+    WaitingMinutes.current = max(ifelse(CurrentFlag == 1, WaitingMinutes, 0)),
+    MaxCurrentFlag = max(CurrentFlag)
   ) %>%
   ungroup() %>%
   as.data.frame()
 
 
-### Complete for the missing DateTimeRound
+### Complete for the missing DateTimeRound, note there's no filling result of MaxCurrentFlag
 # unique(station$DateTimeRound)
 
 station <- station %>%
@@ -132,6 +137,23 @@ station <- station %>%
 
 ### Supply for Location Master data
 set1 <- merge(station, locMaster)
+
+
+# str(station)
+# t1 <- filter(station, MaxCurrentFlag == 1)
+# t2 <- filter(station, MaxCurrentFlag == 0)
+# t3 <- filter(station, is.na(MaxCurrentFlag))
+# str(t1)
+# str(t2)
+# str(t3)
+
+# t1 <- filter(station, WaitingQueue.current > 0)
+# t2 <- filter(station, WaitingQueue.current <= 0)
+# t3 <- filter(station, is.na(WaitingQueue.current))
+# str(t1)
+# str(t2)
+# str(t3)
+
 
 
 ### Locate for booking data
@@ -245,6 +267,7 @@ mdf <- mdf %>%
 
 throughput <- merge(mdf, locMaster)
 
+
 print("Log: step 1 data preparation succeeded")
 
 ### Basic validations
@@ -319,16 +342,18 @@ addCircleMarkers(data = leaf, lng = ~lon, lat = ~lat,
     radius = sqrt(leaf$SwabCount) * 4,
     color = ~SwabPerDesk.color,
     fillOpacity = .2,
-    label = ~paste(Sno,Location,"等待需時",round(SwabPerDesk/2),"分鐘"),
+    label = ~paste(Sno,Location,"\n等待",WaitingQueue.current,"人","\n需時",WaitingMinutes.current,"分鐘"),
     popup = ~paste("採樣站:", Location,
                     "<br>Location:", LocationEnglish,
+                    "<br>現時等待人數 / Number in queuing:", WaitingQueue.current,
+                    "<br>現時等待需分鐘 / Queuing in minutes:", WaitingMinutes.current,
                     "<br>預採樣數 / Number to swab:", SwabCount,
                     # "<br>口咽拭數 / Mouth swab:", 口咽拭,
                     # "<br>鼻咽拭數 / Nasal swab:", 鼻咽拭,
                     "<br>口採樣點 / Counters of mouth swab :", 口採樣點.median,
                     "<br>鼻採樣點 / Counters of nasal swab:", 鼻採樣點.median,
-                    "<br>每採樣枱等待人数 / Per counter waiting people:", round(SwabPerDesk),
-                    "<br>每採樣枱待時級別 / Per counter waiting level:", SwabPerDesk.ntile
+                    "<br>每採樣枱預約数 / Swabs per counter:", round(SwabPerDesk),
+                    "<br>每採樣枱預待時級別 / Per counter waiting level:", SwabPerDesk.ntile
                     # "<br>平均採樣 / Overall average", round(AvgSwabCount, digits = 2),
                     ),
     labelOptions = labelOptions(textsize = "26px"),
