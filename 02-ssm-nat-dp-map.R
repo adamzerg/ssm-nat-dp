@@ -304,11 +304,27 @@ print("Log: step 1 data preparation succeeded")
 ### Start generate for map html with leaflet
 totalSwabBooking <- sum(booking$SwabCount,na.rm = TRUE)
 totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
-mapTitle <- paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
-          ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
-          , " 數據基於現在時間 ", versionEt, sep = "")
+
+mapTitle <- paste("本輪全民核酸總完成<br>", format(totalSwabDone,big.mark=",",scientific = FALSE)
+          ," / ", format(totalSwabBooking,big.mark = ",",scientific = FALSE)
+          , " <br>更新於 ", versionEt, sep = "")
 tag.map.title <- tags$style(HTML("
   .leaflet-control.map-title {
+    transform: translate(-50%,20%);
+    position: fixed !important;
+    left: 50%;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: rgba(255,255,255,0.75);
+    font-weight: bold;
+    font-size: 18px;
+  }
+"))
+
+mapFooter <- paste("* 數據來源澳門衛生局<br>** 地圖由澳門數據科學應用協會<br>  Macau Data Lab by MDSAA 統整繪製")
+tag.map.footer <- tags$style(HTML("
+  .leaflet-control.map-bottom {
     transform: translate(-50%,20%);
     position: fixed !important;
     left: 50%;
@@ -317,24 +333,34 @@ tag.map.title <- tags$style(HTML("
     padding-right: 10px;
     background: rgba(255,255,255,0.75);
     font-weight: bold;
-    font-size: 26px;
+    font-size: 16px;
   }
 "))
+
 
 title <- tags$div(
   tag.map.title, HTML(mapTitle)
 )
+
+footer <- tags$div(
+  tag.map.footer, HTML(mapFooter)
+)
+
 
 
 leaf <- throughput %>% filter(DateTimeRound == versionEtRound & SwabCount > 0)
 
 colorlabel <- unique(leaf[c("SwabPerDesk.ntile", "SwabPerDesk.color")]) %>%
             mutate(WaitingLevel = case_when(SwabPerDesk.ntile == 4 ~ "逼迫 / Max",
-                                SwabPerDesk.ntile == 3 ~ "多人 / Crowed",
+                                SwabPerDesk.ntile == 3 ~ "多人 / Crowded",
                                 SwabPerDesk.ntile == 2 ~ "稍等 / Some Crowd",
-                                SwabPerDesk.ntile == 1 ~ "輕鬆 / Not Crowed",
+                                SwabPerDesk.ntile == 1 ~ "輕鬆 / Not Crowded",
                                 TRUE ~ ""),)
 label <- colorlabel[order(colorlabel[,1]),]
+
+
+# create the string for responsiveness that will be injected in the <head> section of the leaflet output html file. Note that the quotes were escaped using the backslash character : `\`.  
+responsiveness = "\'<meta name=\"viewport\" content=\"width=device-width, initial-scale=0.7, maximum-scale=1.0\">\'"
 
 locMap <- leaflet() %>% addProviderTiles(providers$CartoDB.Voyager) %>%
 addCircleMarkers(data = leaf, lng = ~lon, lat = ~lat,
@@ -356,12 +382,17 @@ addCircleMarkers(data = leaf, lng = ~lon, lat = ~lat,
                     "<br>每採樣枱預待時級別 / Per counter waiting level:", SwabPerDesk.ntile
                     # "<br>平均採樣 / Overall average", round(AvgSwabCount, digits = 2),
                     ),
-    labelOptions = labelOptions(textsize = "26px"),
+    labelOptions = labelOptions(textsize = "18px"),
     clusterOptions = markerClusterOptions()
     ) %>%
-addLegend(title = "等待級別 / Waiting level", colors = label$SwabPerDesk.color, labels = label$WaitingLevel) %>%
-addControl(title, position = "topleft", className = "map-title")
+addLegend(title = "等待級別 / Waiting level", position = "bottomright", colors = label$SwabPerDesk.color, labels = label$WaitingLevel) %>%
+addControl(title, position = "topleft", className = "map-title") %>% 
+addControl(footer, position = "bottomleft", className = "map-footer") %>%
+htmlwidgets::onRender(paste0("
+    function(el, x) {
+      $('head').append(",responsiveness,");
+    }"))
 
-saveWidget(locMap, title = "Macau All People Nucleic Acid Testing", file = "macau-all-people-nat.html")
+saveWidget(locMap, title = "Macau All People Nucleic Acid Testing Location Map - produced by MODL", file = "macau-all-people-nat.html",selfcontained = TRUE)
 
 print("Log: step 2 map generated succeeded")
