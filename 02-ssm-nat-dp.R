@@ -1,4 +1,6 @@
 
+setwd("D:/Documents/GitHub/ssm-nat-dp")
+
 library(lubridate)
 library(data.table)
 library(readxl)
@@ -18,39 +20,57 @@ version <- versiondf %>% select(Version) %>% toString
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
 # targetTime <- as.POSIXct("2022-06-28 17:21", "Asia/Taipei")
-targetTimeRound <- floor_date(targetTime, "30mins")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
 versionSt <- as.POSIXct(StartTimeStr, "Asia/Taipei")
-versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei")
+versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei") - 1 # Avoid version ended given no result capture
 if (targetTime %within% interval(versionSt, versionEt)) {
   versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
 }
+versionEtRound <- floor_date(versionEt, "30mins")
 versionTi <- interval(versionSt, versionEt)
 versionTr <- seq(versionSt, versionEt, "30 mins")
 
 versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
-
 
 # dir('data/location-master', full.names=TRUE)
 locMaster <- read_csv(paste("data/location-master/location-master-",version,".csv", sep = ""))
 # print(locMaster, n=70)
 
 
-### Loop to ingest all scraped data
+### Loop to ingest all scraped data fallen within the version interval
+# if (versionSt < '2022-07-07') {
+# filelist <- dir('data/station', full.names=TRUE)
+# tailfile <- tail(filelist, 1)
+# scrp <- data.frame()
+#   for (file in filelist) {
+#     filetimestr <- sub(".csv", "", sub(".*-", "", file))
+#     filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
+#     tailfileflag <- ifelse(file == tailfile, 1, 0)
+#     if (filetime %within% versionTi) {
+#       temp <- read.csv(file, na = "---")
+#       temp$DateTime <- as.POSIXlt(filetime)
+#       temp$CurrentFlag <- tailfileflag
+#       scrp <- rbind(scrp,as.data.frame(temp))
+#     }
+#   }
+#   setnames(scrp,c("等候時間","等候時間.1"),c("SymbolToRemove","等候時間"))
+# } else {
 filelist <- dir('data/aptmon', full.names=TRUE)
-
+tailfile <- tail(filelist, 1)
 scrp <- data.frame()
-for (file in filelist) {
-  filetimestr <- sub(".csv", "",sub(".*-", "", file))
-  filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
-  if(filetime %within% versionTi) {
-    temp <- read.csv(file, na = "---")
-    temp$DateTime <- as.POSIXlt(filetime)
-    scrp <- rbind(scrp,as.data.frame(temp))
+  for (file in filelist) {
+    filetimestr <- sub(".xlsx", "", sub(".*-", "", file))
+    filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
+    tailfileflag <- ifelse(file == tailfile, 1, 0)
+    if (filetime %within% versionTi) {
+      temp <- read_excel(file, na = "---")
+      temp$DateTime <- as.POSIXlt(filetime)
+      temp$CurrentFlag <- tailfileflag
+      scrp <- rbind(scrp,as.data.frame(temp))
+    }
   }
-}
 
 # tail(scrp[order(scrp[,"DateTime"]),], 30)
 
@@ -62,17 +82,16 @@ scrp$WaitingMinutes <- as.numeric(as.character(sub("分鐘", "",sub(".*>", "", s
 scrp$口採樣點 = as.numeric(scrp$口採樣點)
 scrp$鼻採樣點 = as.numeric(scrp$鼻採樣點)
 scrp$DeskCount <- rowSums(scrp[ ,c("口採樣點", "鼻採樣點")], na.rm=TRUE)
-scrp$HourNumber <- 
-  sapply(strsplit(substr(scrp$DateTimeRound,12,16),":"),
+scrp$HourNumber <- sapply(strsplit(substr(scrp$DateTimeRound,12,16),":"),
          function(x) {
            x <- as.numeric(x)
            x[1]+x[2]/60
          }
   )
-str(scrp)
+# str(scrp)
 
 
-station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>%
+station <- scrp %>% group_by(序號,Location,DateTimeRound,HourNumber) %>%
   summarise(
     DeskCount.mean = mean(DeskCount, na.rm = TRUE),
     DeskCount.median = median(DeskCount, na.rm = TRUE),
@@ -84,16 +103,20 @@ station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>
     WaitingMinutes.mean = mean(WaitingMinutes, na.rm = TRUE),
     WaitingQueue.median = median(WaitingQueue, na.rm = TRUE),
     WaitingMinutes.median = median(WaitingMinutes, na.rm = TRUE),
+    WaitingQueue.current = max(ifelse(CurrentFlag == 1, WaitingQueue, 0)),
+    WaitingMinutes.current = max(ifelse(CurrentFlag == 1, WaitingMinutes, 0)),
+    MaxCurrentFlag = max(CurrentFlag)
   ) %>%
   ungroup() %>%
   as.data.frame()
+# str(station)
 
 
-### Complete for the missing DateTimeRound
+### Complete for the missing DateTimeRound, note there's no filling result of MaxCurrentFlag
 # unique(station$DateTimeRound)
 
 station <- station %>%
-  complete(nesting(Location,序號,類別),
+  complete(nesting(Location,序號),
            DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -105,7 +128,7 @@ station <- station %>%
   mutate(DeskCount.ntile = ntile(DeskCount.mean, 5),
          AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup() %>%
-  complete(nesting(Location,序號,類別),
+  complete(nesting(Location,序號),
            DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -147,6 +170,7 @@ sheet2 <- paste(str_remove_all(day2,"-"),"A",sep="")
 # sheets <- c(sheet1,sheet2,sheet3)
 sheets <- c(sheet1,sheet2)
 
+### Loop to ingest for all sheets
 df <- data.frame()
 for (sheetname in sheets) {
   # sheetname <- "20220704A"
@@ -176,7 +200,7 @@ for (sheetname in sheets) {
   df <- rbind(df,as.data.frame(df1))
 }
 
-#df %>% filter(Location %like% '流動核酸採樣車')
+# df %>% filter(Location %like% '流動核酸採樣車')
 
 pdf <- df %>% pivot_wider(names_from = variable, values_from = value)
 pdf <- as.data.frame(pdf)
@@ -204,14 +228,14 @@ booking <- pdf %>%
     DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
     Status = ifelse(DateTimeRound <= versionEt, "2.已完成", "1.預約中")
   )
-str(booking)
+# str(booking)
 
 ### Supply for Location Master data
 set2 <- merge(booking, locMaster)
-str(set2)
 
+# str(set2)
 
-
+### Combine for bookings and station data into throughput dataframe
 mdf <- merge(booking, station, by = c("Location", "DateTimeRound","HourNumber")) #, all.x=TRUE)
 mdf <- mdf %>%
   mutate(
@@ -236,7 +260,9 @@ mdf <- mdf %>%
 throughput <- merge(mdf, locMaster)
 
 
-## Basic checking
+print("Log: step 1 data preparation succeeded")
+
+### Basic validations
 
 # mdf %>% group_by(SwabPerDesk.ntile) %>%
 #       summarise(minSwabPerDesk = min(SwabPerDesk),
@@ -267,6 +293,7 @@ throughput <- merge(mdf, locMaster)
 
 
 
+### Start generate for map html with leaflet
 totalSwabBooking <- sum(booking$SwabCount,na.rm = TRUE)
 totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
 
@@ -311,7 +338,7 @@ g4 <- ggplot(data = booking, aes(x = reorder(factor(DurationDayNumber),SwabCount
   ggtitle("當天總計數")
 
 # grid.arrange(g1, g3, g2, g4, ncol = 2,
-# top = paste("Total Swab Done ", totalSwabDone, " out of ", totalSwabBooking, " bookings as of ", targetTimeRound, sep = " "))
+# top = paste("Total Swab Done ", totalSwabDone, " out of ", totalSwabBooking, " bookings as of ", versionEtRound, sep = " "))
 
 
 # tilevalue <- c(max(filter(throughput, SwabPerDesk.ntile == 1)$SwabPerDesk),
@@ -377,7 +404,7 @@ g6 <- ggplot(p6, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fi
   xlab("採樣站") + ylab("可採樣點數目") +
   ggtitle("採樣站可採樣點中位數(較高為佳)")
 
-# grid.arrange(g5, g6, ncol = 2, top = paste("Number of swab counters by location as of", targetTimeRound, sep = " "))
+# grid.arrange(g5, g6, ncol = 2, top = paste("Number of swab counters by location as of", versionEtRound, sep = " "))
 
 # filter(set1, DeskCount.mean >= 20)
 
@@ -476,8 +503,8 @@ png(paste("plot/Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep =
 grid.arrange(layout_matrix = rbind(c(1,2), c(3,4), c(5,5), c(6,6)), g3, g2, g5, g6, sb0, st0, ncol = 2,
 top = textGrob(paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
           ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
-          , " 數據基於現在時間 ", targetTimeRound, "\n以下統整為",setArea,"區，僅取該區單採樣點最低吞吐量三採樣站", sep = ""), gp=gpar(fontsize=24,font=8)),
-bottom = textGrob(paste("* 數據來源官方但由民間統計整理，可能有延遲。 ** 各地區僅選取最低吞吐量三個採樣站，供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
+          , " 數據基於現在時間 ", versionEtRound, "\n以下統整為",setArea,"區，僅取該區單採樣點最低吞吐量三採樣站", sep = ""), gp=gpar(fontsize=24,font=8)),
+bottom = textGrob(paste("* 數據來源官方 地圖由澳門數據應用協會MODL統計整理繪製 ** 各地區僅選取最低吞吐量三個採樣站，供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
 dev.off()
 }
 

@@ -42,7 +42,7 @@ station <- df
 
 Sys.sleep(10)
 
-write.csv(station,paste("D:/Documents/GitHub/ssm-nat-dp/data/aptmon-en/station-",format(Sys.time(), "%Y%m%d%H%M%S"),".csv", sep = ""), row.names = TRUE)
+write.csv(station,paste("D:/Documents/GitHub/ssm-nat-dp/data/station-en/station-",format(Sys.time(), "%Y%m%d%H%M%S"),".csv", sep = ""), row.names = TRUE)
 
 Sys.sleep(10)
 

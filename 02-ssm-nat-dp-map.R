@@ -30,7 +30,7 @@ targetTime <- as.POSIXct(now, "Asia/Taipei")
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
 versionSt <- as.POSIXct(StartTimeStr, "Asia/Taipei")
-versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei")
+versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei") - 1 # Avoid version ended given no result capture
 if (targetTime %within% interval(versionSt, versionEt)) {
   versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
 }
@@ -45,23 +45,38 @@ locMaster <- read_csv(paste("data/location-master/location-master-",version,".cs
 # print(locMaster, n=70)
 
 
-
 ### Loop to ingest all scraped data fallen within the version interval
+# if (versionSt < '2022-07-07') {
+# filelist <- dir('data/station', full.names=TRUE)
+# tailfile <- tail(filelist, 1)
+# scrp <- data.frame()
+#   for (file in filelist) {
+#     filetimestr <- sub(".csv", "", sub(".*-", "", file))
+#     filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
+#     tailfileflag <- ifelse(file == tailfile, 1, 0)
+#     if (filetime %within% versionTi) {
+#       temp <- read.csv(file, na = "---")
+#       temp$DateTime <- as.POSIXlt(filetime)
+#       temp$CurrentFlag <- tailfileflag
+#       scrp <- rbind(scrp,as.data.frame(temp))
+#     }
+#   }
+#   setnames(scrp,c("等候時間","等候時間.1"),c("SymbolToRemove","等候時間"))
+# } else {
 filelist <- dir('data/aptmon', full.names=TRUE)
 tailfile <- tail(filelist, 1)
-
 scrp <- data.frame()
-for (file in filelist) {
-  filetimestr <- sub(".csv", "", sub(".*-", "", file))
-  filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
-  tailfileflag <- ifelse(file == tailfile, 1, 0)
-  if(filetime %within% versionTi) {
-    temp <- read.csv(file, na = "---")
-    temp$DateTime <- as.POSIXlt(filetime)
-    temp$CurrentFlag <- tailfileflag
-    scrp <- rbind(scrp,as.data.frame(temp))
+  for (file in filelist) {
+    filetimestr <- sub(".xlsx", "", sub(".*-", "", file))
+    filetime <- strptime(filetimestr,"%Y%m%d%H%M%S")
+    tailfileflag <- ifelse(file == tailfile, 1, 0)
+    if (filetime %within% versionTi) {
+      temp <- read_excel(file, na = "---")
+      temp$DateTime <- as.POSIXlt(filetime)
+      temp$CurrentFlag <- tailfileflag
+      scrp <- rbind(scrp,as.data.frame(temp))
+    }
   }
-}
 
 # tail(scrp[order(scrp[,"DateTime"]),], 30)
 
@@ -69,7 +84,7 @@ for (file in filelist) {
 attr(scrp$DateTime, "tzone") <- "Asia/Taipei"
 scrp$DateTimeRound <- floor_date(scrp$DateTime, "30mins")
 scrp$WaitingQueue <- as.numeric(as.character(sub("*人", "", scrp$輪候人數)))
-scrp$WaitingMinutes <- as.numeric(as.character(sub("分鐘", "",sub(".*>", "", scrp$等候時間.1))))
+scrp$WaitingMinutes <- as.numeric(as.character(sub("分鐘", "",sub(".*>", "", scrp$等候時間))))
 scrp$口採樣點 = as.numeric(scrp$口採樣點)
 scrp$鼻採樣點 = as.numeric(scrp$鼻採樣點)
 scrp$DeskCount <- rowSums(scrp[ ,c("口採樣點", "鼻採樣點")], na.rm=TRUE)
@@ -82,7 +97,7 @@ scrp$HourNumber <- sapply(strsplit(substr(scrp$DateTimeRound,12,16),":"),
 # str(scrp)
 
 
-station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>%
+station <- scrp %>% group_by(序號,Location,DateTimeRound,HourNumber) %>%
   summarise(
     DeskCount.mean = mean(DeskCount, na.rm = TRUE),
     DeskCount.median = median(DeskCount, na.rm = TRUE),
@@ -100,13 +115,14 @@ station <- scrp %>% group_by(序號,Location,類別,DateTimeRound,HourNumber) %>
   ) %>%
   ungroup() %>%
   as.data.frame()
+# str(station)
 
 
 ### Complete for the missing DateTimeRound, note there's no filling result of MaxCurrentFlag
 # unique(station$DateTimeRound)
 
 station <- station %>%
-  complete(nesting(Location,序號,類別),
+  complete(nesting(Location,序號),
            DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -118,7 +134,7 @@ station <- station %>%
   mutate(DeskCount.ntile = ntile(DeskCount.mean, 5),
          AvgDeskCount = median(DeskCount.mean)) %>%
   ungroup() %>%
-  complete(nesting(Location,序號,類別),
+  complete(nesting(Location,序號),
            DateTimeRound = seq.POSIXt(versionSt, versionEt, by="30 min")
   ) %>%
   mutate(HourNumber = hour(DateTimeRound) + minute(DateTimeRound) / 60) %>%
@@ -138,8 +154,7 @@ station <- station %>%
 ### Supply for Location Master data
 set1 <- merge(station, locMaster)
 
-
-# str(station)
+# str(set1)
 # t1 <- filter(station, MaxCurrentFlag == 1)
 # t2 <- filter(station, MaxCurrentFlag == 0)
 # t3 <- filter(station, is.na(MaxCurrentFlag))
@@ -307,7 +322,7 @@ totalSwabDone <- sum(throughput$SwabCount,na.rm = TRUE)
 
 mapTitle <- paste("本輪全民核酸總完成<br>", format(totalSwabDone,big.mark=",",scientific = FALSE)
           ," / ", format(totalSwabBooking,big.mark = ",",scientific = FALSE)
-          , " <br>更新於 ", versionEt, sep = "")
+          , " <br>於 ", versionEt, sep = "")
 tag.map.title <- tags$style(HTML("
   .leaflet-control.map-title {
     transform: translate(-50%,20%);
