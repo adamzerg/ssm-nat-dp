@@ -200,6 +200,7 @@ for (sheetname in sheets) {
   
   ### Extract first row for location list
   cnames <- read_excel(file2, sheet = sheetname, n_max = 0, na = "---") %>% names()
+  cnames <- gsub("\n", "\r\n", cnames)
   cn1 <- cnames[seq(6, length(cnames))]
   lls1 <- sub(".*?-", "",cn1[grepl("^[^...*]", cn1)])
   ### Extract data from 2nd row
@@ -306,13 +307,19 @@ print("Log: step 1 data preparation succeeded")
 # str(booking)
 # str(set2)
 
+# print(locMaster, n=70)
 # str(mdf)
 # str(throughput)
+
 
 # head(throughput[order(throughput[,"DateTimeRound"]),], 60)
 
 # set1 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
-# set2 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# booking %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# t <- filter(booking, Location %like% "流動核酸採樣車-\r")
+# unique(t$Location)
+# t2 <- filter(locMaster, Location %like% "流動核酸採樣車-\r")
+# unique(t2$Location)
 
 
 
