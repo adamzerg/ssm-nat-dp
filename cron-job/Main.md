@@ -1,0 +1,4 @@
+
+FUNCTION Main_copy GLOBAL
+    CALL Scheduler
+END FUNCTION
