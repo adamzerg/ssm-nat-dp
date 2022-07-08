@@ -12,16 +12,17 @@ ggmap_hide_api_key()
 # locationList
 
 # Update version HEREbefore you RUN!!!
-version <- "20220706"
+version <- "20220708"
 locScrpZh <- read_csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
 locScrpEn <- read_csv(paste("data/location-master/aptmon-location-english-",version,".csv", sep = ""), quote="\"")
 locXlsx <- read_csv(paste("data/location-master/RNA010-location-",version,".csv", sep = ""))
 
 # correction for the newline \n
-locScrpZh <- locScrpZh %>% mutate(LocationChinese = str_replace_all(LocationChinese, "\\\\n", "\n"))
+# locScrpZh <- locScrpZh %>% mutate(LocationChinese = str_replace_all(LocationChinese, "\\\\n", "\n"))
+# locScrpZh <- locScrpZh %>% mutate(LocationChinese = str_replace_all(LocationChinese, "\r\n", "<br>"))
 
-# view(locScrpEn)
-# view(locXlsx)
+# print(locScrpZh,n=70)
+# print(locXlsx,n=70)
 
 # 53
 # str(locScrpZh)
@@ -32,7 +33,7 @@ locScrpZh <- locScrpZh %>% mutate(LocationChinese = str_replace_all(LocationChin
 
 # For data quality, ensure number of records stays same as 53
 locMaster.1 <- merge(locScrpZh,locScrpEn)
-# str(locMaster.1)
+# print(locMaster.1)
 
 # merge all, cross join 2 sets 53 vs 32
 locMaster.2 <- merge(x=locMaster.1,y=locXlsx,by="Sno",all=TRUE)
@@ -108,7 +109,7 @@ locMaster.2$area <- ifelse(locMaster.2$lat<=22.143,"路環",
 # view(locMaster.2)
 
 locMaster <- data.frame(locMaster.2[ , c("Sno", "Location", "LocationEnglish", "lon", "lat", "area")])
-# view(locMaster)
+# print(locMaster)
 
 ## Export to csv
 write_csv(locMaster, paste("data/location-master/location-master-",version,".csv", sep = ""))
