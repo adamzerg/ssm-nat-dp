@@ -364,21 +364,12 @@ g4 <- ggplot(data = booking, aes(x = reorder(factor(DurationDayNumber),SwabCount
 areaList <- unique(locMaster$area)
 
 for (setArea in areaList) {
-# setArea <- #"半島南"
+# setArea <- "氹仔"
 
-# if (setArea == "Macau") {
-#   areaSet <- c("澳門文化中心","鏡平學校（中學部）","望廈體育中心一樓","工人體育場一樓")
-# } else if (setArea == "Taipa") {
-#   areaSet <- c("北安客運碼頭","威尼斯人展覽館A、B、C館","澳門大學","奧林匹克體育中心室內體育館")
-# } else if (setArea == "Coloane") {
-#   areaSet <- c("石排灣公立學校","澳門保安部隊高等學校","街總石排灣家庭及社區綜合服務中心","澳門大學")
-# }
-
-# unique(throughput[c("Sno","Location", "AvgSwabPerDesk")])
 areaSet0 <- throughput %>% filter(area == setArea & substr(Sno,0,1) == "B") %>%
   group_by(Location) %>%
   tally(AvgSwabPerDesk) %>%
-  slice_min(n, n = 3) %>%
+  slice_min(n, n = 4) %>%
   select(Location)
 
 areaSet <- paste(areaSet0$Location, sep=" ", collapse=NULL)
@@ -407,7 +398,6 @@ g6 <- ggplot(p6, aes(x = reorder(Location, AvgDeskCount), y = DeskCount.mean, fi
 # grid.arrange(g5, g6, ncol = 2, top = paste("Number of swab counters by location as of", versionEtRound, sep = " "))
 
 # filter(set1, DeskCount.mean >= 20)
-
 
 
 # prdf <- throughput %>% 
