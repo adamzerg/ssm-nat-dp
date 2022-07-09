@@ -1,5 +1,5 @@
 
-setwd("D:/Documents/GitHub/ssm-nat-dp")
+setwd(paste(Sys.getenv("OneDrive"), "\\GitHub\\ssm-nat-dp", sep=''))
 
 library(lubridate)
 library(data.table)
