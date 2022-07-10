@@ -415,6 +415,6 @@ htmlwidgets::onRender(paste0("
       $('head').append(",responsiveness,");
     }"))
 
-saveWidget(locMap, title = "Macau All People Nucleic Acid Testing Location Map - produced by MODL", file = "macau-all-people-nat.html",selfcontained = TRUE)
+saveWidget(locMap, title = "MODL全民核酸輪候地圖", file = "macau-all-people-nat.html",selfcontained = TRUE)
 
 print("Log: step 2 map generated succeeded")
