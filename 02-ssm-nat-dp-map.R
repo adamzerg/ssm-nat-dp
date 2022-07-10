@@ -78,7 +78,7 @@ scrp <- data.frame()
     }
   }
 
-# tail(scrp[order(scrp[,"DateTime"]),], 30)
+# tail(scrp[order(scrp[,"DateTime"]),], 70)
 
 ### Date and time transformation
 attr(scrp$DateTime, "tzone") <- "Asia/Taipei"
@@ -117,8 +117,9 @@ station <- scrp %>% group_by(序號,Location,DateTimeRound,HourNumber) %>%
   as.data.frame()
 # str(station)
 
-
+# filter(scrp, Location == "MGM Cotai")
 ### Complete for the missing DateTimeRound, note there's no filling result of MaxCurrentFlag
+# unique(scrp$Location)
 # unique(station$DateTimeRound)
 
 station <- station %>%
@@ -196,7 +197,7 @@ sheets <- c(sheet1,sheet2)
 ### Loop to ingest for all sheets
 df <- data.frame()
 for (sheetname in sheets) {
-  # sheetname <- "20220704A"
+  # sheetname <- "20220710A"
   
   ### Extract first row for location list
   cnames <- read_excel(file2, sheet = sheetname, n_max = 0, na = "---") %>% names()
@@ -213,7 +214,7 @@ for (sheetname in sheets) {
   ### Repeat Location info for number of rows
   dtls <- as.data.table(lls1)
   setnames(dtls, "lls1", "Location")
-  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
+  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車-.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
   ### Melt to pivot
   sdf1 <- as.data.frame(sdf1)
   mdf1 <- reshape::melt(sdf1, id = c("SwabDate", "SwabTime"))
@@ -316,11 +317,12 @@ print("Log: step 1 data preparation succeeded")
 
 # set1 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
 # booking %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
-# t <- filter(booking, Location %like% "流動核酸採樣車-\r")
+# t <- filter(booking, Location %like% "流動核酸採樣車")
 # unique(t$Location)
-# t2 <- filter(locMaster, Location %like% "流動核酸採樣車-\r")
+# t2 <- filter(locMaster, Location %like% "流動核酸採樣車")
 # unique(t2$Location)
-
+# t3 <- filter(throughput, Location %like% "流動核酸採樣車")
+# unique(t3$Location)
 
 
 ### Start generate for map html with leaflet
