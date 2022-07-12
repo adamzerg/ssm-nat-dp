@@ -10,7 +10,11 @@ library(gridExtra)
 library(plotly)
 library(ggmap)
 library(GGally)
+library(sp)
+library(rgeos)
 
+
+### Set time, version, hence pick location master data
 now <- Sys.time()
 
 verMaster <- read_csv("data/version-master/version-master.csv", col_types = cols(StartTime = col_character(), EndTime = col_character()), quote="\"")
@@ -19,7 +23,7 @@ version <- versiondf %>% select(Version) %>% toString
 
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-# targetTime <- as.POSIXct("2022-06-28 17:21", "Asia/Taipei")
+# targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
@@ -72,7 +76,7 @@ scrp <- data.frame()
     }
   }
 
-# tail(scrp[order(scrp[,"DateTime"]),], 30)
+# tail(scrp[order(scrp[,"DateTime"]),], 70)
 
 ### Date and time transformation
 attr(scrp$DateTime, "tzone") <- "Asia/Taipei"
@@ -111,8 +115,9 @@ station <- scrp %>% group_by(序號,Location,DateTimeRound,HourNumber) %>%
   as.data.frame()
 # str(station)
 
-
+# filter(scrp, Location == "MGM Cotai")
 ### Complete for the missing DateTimeRound, note there's no filling result of MaxCurrentFlag
+# unique(scrp$Location)
 # unique(station$DateTimeRound)
 
 station <- station %>%
@@ -148,7 +153,24 @@ station <- station %>%
 ### Supply for Location Master data
 set1 <- merge(station, locMaster)
 
+# str(set1)
+# t1 <- filter(station, MaxCurrentFlag == 1)
+# t2 <- filter(station, MaxCurrentFlag == 0)
+# t3 <- filter(station, is.na(MaxCurrentFlag))
+# str(t1)
+# str(t2)
+# str(t3)
 
+# t1 <- filter(station, WaitingQueue.current > 0)
+# t2 <- filter(station, WaitingQueue.current <= 0)
+# t3 <- filter(station, is.na(WaitingQueue.current))
+# str(t1)
+# str(t2)
+# str(t3)
+
+
+
+### Locate for booking data
 fileTwr <- data.frame()
 filelist2 <- dir('data/RNA010', full.names=TRUE)
 for (file2 in filelist2) {
@@ -173,10 +195,11 @@ sheets <- c(sheet1,sheet2)
 ### Loop to ingest for all sheets
 df <- data.frame()
 for (sheetname in sheets) {
-  # sheetname <- "20220704A"
+  # sheetname <- "20220710A"
   
   ### Extract first row for location list
   cnames <- read_excel(file2, sheet = sheetname, n_max = 0, na = "---") %>% names()
+  cnames <- gsub("\n", "\r\n", cnames)
   cn1 <- cnames[seq(6, length(cnames))]
   lls1 <- sub(".*?-", "",cn1[grepl("^[^...*]", cn1)])
   ### Extract data from 2nd row
@@ -283,13 +306,62 @@ print("Log: step 1 data preparation succeeded")
 # str(booking)
 # str(set2)
 
+# print(locMaster, n=70)
 # str(mdf)
 # str(throughput)
+
 
 # head(throughput[order(throughput[,"DateTimeRound"]),], 60)
 
 # set1 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
-# set2 %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# booking %>% group_by(Location) %>% summarise(count = n_distinct(DateTimeRound)) %>% print(n=70)
+# t <- filter(booking, Location %like% "流動核酸採樣車")
+# unique(t$Location)
+# t2 <- filter(locMaster, Location %like% "流動核酸採樣車")
+# unique(t2$Location)
+# t3 <- filter(throughput, Location %like% "流動核酸採樣車")
+# unique(t3$Location)
+
+
+
+lonlat <- unique(throughput[, c("Sno","Location","LocationEnglish","lon","lat","area")])
+sp.lonlat <- lonlat
+coordinates(sp.lonlat) <- ~lon+lat
+class(sp.lonlat)
+d <- gDistance(sp.lonlat, byid=T)
+min.d <- apply(d, 1, function(x) order(x, decreasing=F)[2])
+locNeibor <- cbind(lonlat, lonlat[min.d,], apply(d, 1, function(x) sort(x, decreasing=F)[2]))
+colnames(locNeibor) <- c(colnames(lonlat), "n.Sno","n.Location","n.LocationEnglish","n.lon","n.lat","n.area","distance")
+
+# view(locNeibor)
+
+sb0 <- filter(set2, Location %in% areaSet) %>% 
+  ggplot(aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
+  geom_bar(stat="identity", alpha = .7) +
+  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
+  facet_wrap(~Location, ncol = 1) +
+  theme_minimal() +
+  xlab("每小時") + ylab("總計數") +
+  ggtitle("採樣站已完成及預約數每小時變化")
+
+# sh0 <- filter(tp, Location %in% areaSet) %>%
+#   ggplot(aes(DateTimeRound, variable)) +
+#   geom_tile(aes(fill = prop), alpha = .8) +
+#   scale_fill_viridis_c(option = 'magma', direction = -1) +
+#   facet_wrap(~LocationEnglish, ncol = 1) +
+#   theme_minimal() +
+#   xlab("Hours in interval") + ylab("Number proportion")
+
+st0 <- filter(throughput, Location %in% areaSet) %>% 
+  ggplot(aes(x = DateTimeRound, y = SwabPerDesk, fill = SwabPerDesk)) +
+  geom_bar(stat = "identity", alpha = .8) +
+  geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
+  scale_fill_viridis_c(option = 'magma', direction = -1) +
+  facet_wrap(~Location, ncol = 1) +
+  theme_minimal() +
+  xlab("每小時") + ylab("吞吐量") +
+  ggtitle("採樣站吞吐量(即每採樣點每半小時採樣數)")
+
 
 
 
@@ -492,7 +564,7 @@ png(paste("plot/Macau All People NAT ", versionEtStr, " ", setArea, ".png",sep =
 # grid.arrange(g1, g3, g2, g4, g6, g8, sb1, st1, sb2, st2, ncol = 2,
 grid.arrange(layout_matrix = rbind(c(1,2), c(3,4), c(5,5), c(6,6)), g3, g2, g5, g6, sb0, st0, ncol = 2,
 top = textGrob(paste("全民核酸總完成數 ", format(totalSwabDone,big.mark=",",scientific=FALSE)
-          ," / ", format(totalSwabBooking,big.mark=",",scientific=FALSE)
+          ," / ", format(totalSwabBooking,big.mark=",", scientific=FALSE)
           , " 數據基於現在時間 ", versionEtRound, "\n以下統整為",setArea,"區，僅取該區單採樣點最低吞吐量三採樣站", sep = ""), gp=gpar(fontsize=24,font=8)),
 bottom = textGrob(paste("* 數據來源官方 地圖由澳門數據應用協會MODL統計整理繪製 ** 各地區僅選取最低吞吐量三個採樣站，供排隊引流參考。"), gp=gpar(fontsize=16,font=8)))
 dev.off()

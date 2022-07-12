@@ -15,7 +15,6 @@ library(htmlwidgets)
 library(htmltools)
 
 
-
 ### Set time, version, hence pick location master data
 now <- Sys.time()
 
@@ -25,7 +24,7 @@ version <- versiondf %>% select(Version) %>% toString
 
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-# targetTime <- as.POSIXct("2022-07-05 17:48", "Asia/Taipei")
+# targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
@@ -214,7 +213,7 @@ for (sheetname in sheets) {
   ### Repeat Location info for number of rows
   dtls <- as.data.table(lls1)
   setnames(dtls, "lls1", "Location")
-  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車-.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
+  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
   ### Melt to pivot
   sdf1 <- as.data.frame(sdf1)
   mdf1 <- reshape::melt(sdf1, id = c("SwabDate", "SwabTime"))
