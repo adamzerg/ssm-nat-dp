@@ -23,11 +23,12 @@ version <- versiondf %>% select(Version) %>% toString
 
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-# targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
+targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
 versionSt <- as.POSIXct(StartTimeStr, "Asia/Taipei")
+versionEt0 <- as.POSIXct(EndTimeStr, "Asia/Taipei")
 versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei") - 1 # Avoid version ended given no result capture
 if (targetTime %within% interval(versionSt, versionEt)) {
   versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
@@ -35,6 +36,7 @@ if (targetTime %within% interval(versionSt, versionEt)) {
 versionEtRound <- floor_date(versionEt, "30mins")
 versionTi <- interval(versionSt, versionEt)
 versionTr <- seq(versionSt, versionEt, "30 mins")
+versionTr0 <- seq(versionSt, versionEt0, "30 mins")
 
 versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
 
@@ -249,7 +251,7 @@ booking <- pdf %>%
     DurationHour = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"hours"),
     DurationDay = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days"),
     DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
-    Status = ifelse(DateTimeRound <= versionEt, "2.已完成", "1.預約中")
+    Status = ifelse(DateTimeRound <= versionEt, "1.已完成", "2.預約中")
   )
 # str(booking)
 
@@ -332,37 +334,48 @@ d <- gDistance(sp.lonlat, byid=T)
 min.d <- apply(d, 1, function(x) order(x, decreasing=F)[2])
 locNeibor <- cbind(lonlat, lonlat[min.d,], apply(d, 1, function(x) sort(x, decreasing=F)[2]))
 colnames(locNeibor) <- c(colnames(lonlat), "n.Sno","n.Location","n.LocationEnglish","n.lon","n.lat","n.area","distance")
-
+locNeibor <- locNeibor[order(locNeibor$Sno),]
+row.names(locNeibor) <- NULL
 # view(locNeibor)
 
-sb0 <- filter(set2, Location %in% areaSet) %>% 
-  ggplot(aes(x = as.POSIXct(DateTimeRound), y = SwabCount, fill = Status)) +
-  geom_bar(stat="identity", alpha = .7) +
-  scale_color_viridis_d(option = 'magma') + scale_fill_viridis_d(option = 'magma') +
-  facet_wrap(~Location, ncol = 1) +
+
+for (i in 1:nrow(locNeibor)) {
+# neibor <- filter(item, Location == "澳門大學") %>% select("Location","n.Location")
+itemSno <- locNeibor[i,]$Sno
+itemLocation <- locNeibor[i,]$Location
+itemNeibor <- locNeibor[i,]$n.Location
+
+neib1 <- filter(set2, Location %in% c(itemLocation, itemNeibor)) %>%
+  mutate(n.color = ifelse(Location == itemNeibor, paste("2.",itemNeibor,sep=""), paste("1.",itemLocation,sep="")))
+p1 <-
+  ggplot(neib1, aes(x = as.POSIXct(DateTimeRound), y = SwabCount, color = n.color, linetype = Status)) +
+  geom_line() +
+  coord_cartesian(xlim = c(versionSt, versionEt0)) +
+  scale_color_brewer(palette = "Paired", direction = -1) +
   theme_minimal() +
-  xlab("每小時") + ylab("總計數") +
-  ggtitle("採樣站已完成及預約數每小時變化")
+  theme(legend.position="top") +
+  xlab("每半小時") + ylab("採樣量")
 
-# sh0 <- filter(tp, Location %in% areaSet) %>%
-#   ggplot(aes(DateTimeRound, variable)) +
-#   geom_tile(aes(fill = prop), alpha = .8) +
-#   scale_fill_viridis_c(option = 'magma', direction = -1) +
-#   facet_wrap(~LocationEnglish, ncol = 1) +
-#   theme_minimal() +
-#   xlab("Hours in interval") + ylab("Number proportion")
-
-st0 <- filter(throughput, Location %in% areaSet) %>% 
-  ggplot(aes(x = DateTimeRound, y = SwabPerDesk, fill = SwabPerDesk)) +
+neib2 <- filter(throughput, Location %in% c(itemLocation,itemNeibor)) %>%
+  mutate(n.color = ifelse(Location == itemNeibor, paste("2.",itemNeibor,sep=""), paste("1.",itemLocation,sep="")))
+# neib2$Location <- factor(Location, levels = c(itemLocation,itemNeibor)) # Reordering group factor levels
+p2 <-
+  ggplot(neib2, aes(x = DateTimeRound, y = SwabPerDesk, group = Location, fill = n.color)) +
   geom_bar(stat = "identity", alpha = .8) +
-  geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "goldenrod") +
-  scale_fill_viridis_c(option = 'magma', direction = -1) +
-  facet_wrap(~Location, ncol = 1) +
+  geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "grey") +
+  coord_cartesian(xlim = c(versionSt, versionEt0)) +
+  scale_fill_brewer(palette = "Paired", direction = -1) +
+  facet_wrap(~n.color, ncol = 1) +
   theme_minimal() +
-  xlab("每小時") + ylab("吞吐量") +
-  ggtitle("採樣站吞吐量(即每採樣點每半小時採樣數)")
+  theme(legend.position="none") +
+  xlab("每半小時") + ylab("吞吐量")
 
-
+png(paste(itemSno, ".png",sep = ""), width = 400, height = 400, res = 80)
+grid.arrange(p1, p2, ncol = 1,
+  top = textGrob(paste(itemLocation,"與最鄰近",itemNeibor,"比較"))
+)
+dev.off()
+}
 
 
 ### Start generate for map html with leaflet
