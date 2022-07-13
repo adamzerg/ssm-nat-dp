@@ -23,7 +23,7 @@ version <- versiondf %>% select(Version) %>% toString
 
 # SWitch the target time HERE to now for real-time capture!!!
 targetTime <- as.POSIXct(now, "Asia/Taipei")
-targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
+# targetTime <- as.POSIXct("2022-07-12 21:48", "Asia/Taipei")
 
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
@@ -326,6 +326,7 @@ print("Log: step 1 data preparation succeeded")
 
 
 
+### Generate of thumbnails
 lonlat <- unique(throughput[, c("Sno","Location","LocationEnglish","lon","lat","area")])
 sp.lonlat <- lonlat
 coordinates(sp.lonlat) <- ~lon+lat
@@ -353,8 +354,9 @@ p1 <-
   coord_cartesian(xlim = c(versionSt, versionEt0)) +
   scale_color_brewer(palette = "Paired", direction = -1) +
   theme_minimal() +
-  theme(legend.position="top") +
-  xlab("每半小時") + ylab("採樣量")
+  theme(legend.title=element_blank(),legend.position="top") +
+  xlab("每半小時") +
+  ylab("採樣量")
 
 neib2 <- filter(throughput, Location %in% c(itemLocation,itemNeibor)) %>%
   mutate(n.color = ifelse(Location == itemNeibor, paste("2.",itemNeibor,sep=""), paste("1.",itemLocation,sep="")))
@@ -368,14 +370,22 @@ p2 <-
   facet_wrap(~n.color, ncol = 1) +
   theme_minimal() +
   theme(legend.position="none") +
-  xlab("每半小時") + ylab("吞吐量")
+  xlab("每半小時") + 
+  ylab("吞吐量")
 
-png(paste(itemSno, ".png",sep = ""), width = 400, height = 400, res = 80)
+png(paste(itemSno, ".png",sep = ""), width = 280, height = 350, res = 70)
+# png(paste(itemSno, ".png",sep = ""), width = 600, height = 700, res = 100)
 grid.arrange(p1, p2, ncol = 1,
-  top = textGrob(paste(itemLocation,"與最鄰近",itemNeibor,"比較"))
+  top = textGrob(paste("與最鄰近",itemNeibor,"比較"))
 )
 dev.off()
 }
+
+print("Log: step 3 plotting comparison succeeded")
+
+
+
+
 
 
 ### Start generate for map html with leaflet

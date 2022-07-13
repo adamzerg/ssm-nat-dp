@@ -13,6 +13,8 @@ library(GGally)
 library(leaflet)
 library(htmlwidgets)
 library(htmltools)
+library(sp)
+library(rgeos)
 
 
 ### Set time, version, hence pick location master data
@@ -29,6 +31,7 @@ targetTime <- as.POSIXct(now, "Asia/Taipei")
 StartTimeStr <- versiondf %>% select(StartTime) %>% toString
 EndTimeStr <- versiondf %>% select(EndTime) %>% toString
 versionSt <- as.POSIXct(StartTimeStr, "Asia/Taipei")
+versionEt0 <- as.POSIXct(EndTimeStr, "Asia/Taipei")
 versionEt <- as.POSIXct(EndTimeStr, "Asia/Taipei") - 1 # Avoid version ended given no result capture
 if (targetTime %within% interval(versionSt, versionEt)) {
   versionEt <- as.POSIXct(targetTime, "Asia/Taipei")
@@ -36,6 +39,7 @@ if (targetTime %within% interval(versionSt, versionEt)) {
 versionEtRound <- floor_date(versionEt, "30mins")
 versionTi <- interval(versionSt, versionEt)
 versionTr <- seq(versionSt, versionEt, "30 mins")
+versionTr0 <- seq(versionSt, versionEt0, "30 mins")
 
 versionEtStr <- str_remove_all(str_remove_all(toString(versionEt), "-"),":")
 
@@ -250,7 +254,7 @@ booking <- pdf %>%
     DurationHour = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"hours"),
     DurationDay = as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days"),
     DurationDayNumber = as.integer(as.numeric((DateTimeRound - ymd_hms(versionSt, tz = "Asia/Taipei")),"days") + 1),
-    Status = ifelse(DateTimeRound <= versionEt, "2.已完成", "1.預約中")
+    Status = ifelse(DateTimeRound <= versionEt, "1.已完成", "2.預約中")
   )
 # str(booking)
 
@@ -392,19 +396,18 @@ addCircleMarkers(data = leaf, lng = ~lon, lat = ~lat,
     color = ~SwabPerDesk.color,
     fillOpacity = .2,
     label = ~paste(Sno,Location,"\n等待",WaitingQueue.current,"人","\n需時",WaitingMinutes.current,"分鐘"),
-    popup = ~paste("採樣站:", Location,
-                    "<br>Location:", LocationEnglish,
-                    "<br>現時等待人數 / Number in queuing:", WaitingQueue.current,
-                    "<br>現時等待需分鐘 / Queuing in minutes:", WaitingMinutes.current,
-                    "<br>預採樣數 / Number to swab:", SwabCount,
-                    # "<br>口咽拭數 / Mouth swab:", 口咽拭,
-                    # "<br>鼻咽拭數 / Nasal swab:", 鼻咽拭,
-                    "<br>口採樣點 / Counters of mouth swab :", 口採樣點.median,
-                    "<br>鼻採樣點 / Counters of nasal swab:", 鼻採樣點.median,
-                    "<br>每採樣枱預約数 / Swabs per counter:", round(SwabPerDesk),
-                    "<br>每採樣枱預待時級別 / Per counter waiting level:", SwabPerDesk.ntile
-                    # "<br>平均採樣 / Overall average", round(AvgSwabCount, digits = 2),
-                    ),
+    popup = ~paste("採樣站: ", Location,
+                    "<br>Location: ", LocationEnglish,
+                    "<br>現時等待人數 / Number in queuing: ", WaitingQueue.current,
+                    "<br>現時等待需分鐘 / Queuing in minutes: ", WaitingMinutes.current,
+                    "<br>預採樣數 / Number to swab: ", SwabCount,
+                    "<br>口採樣點 / Counters of mouth swab: ", 口採樣點.median,
+                    "<br>鼻採樣點 / Counters of nasal swab: ", 鼻採樣點.median,
+                    "<br>每採樣枱預約数 / Swabs per counter: ", round(SwabPerDesk),
+                    "<br>每採樣枱預待時級別 / Per counter waiting level: ", SwabPerDesk.ntile,
+                    "<br> <br>",
+                    "<img src = ", Sno, ".png>",
+                    sep = ""),
     labelOptions = labelOptions(textsize = "18px"),
     clusterOptions = markerClusterOptions()
     ) %>%
@@ -419,3 +422,63 @@ htmlwidgets::onRender(paste0("
 saveWidget(locMap, title = "MODL全民核酸輪候地圖", file = "macau-all-people-nat.html",selfcontained = TRUE)
 
 print("Log: step 2 map generated succeeded")
+
+
+
+
+### Generate of thumbnails
+lonlat <- unique(throughput[, c("Sno","Location","LocationEnglish","lon","lat","area")])
+sp.lonlat <- lonlat
+coordinates(sp.lonlat) <- ~lon+lat
+class(sp.lonlat)
+d <- gDistance(sp.lonlat, byid=T)
+min.d <- apply(d, 1, function(x) order(x, decreasing=F)[2])
+locNeibor <- cbind(lonlat, lonlat[min.d,], apply(d, 1, function(x) sort(x, decreasing=F)[2]))
+colnames(locNeibor) <- c(colnames(lonlat), "n.Sno","n.Location","n.LocationEnglish","n.lon","n.lat","n.area","distance")
+locNeibor <- locNeibor[order(locNeibor$Sno),]
+row.names(locNeibor) <- NULL
+# view(locNeibor)
+
+
+for (i in 1:nrow(locNeibor)) {
+# neibor <- filter(item, Location == "澳門大學") %>% select("Location","n.Location")
+itemSno <- locNeibor[i,]$Sno
+itemLocation <- locNeibor[i,]$Location
+itemNeibor <- locNeibor[i,]$n.Location
+
+neib1 <- filter(set2, Location %in% c(itemLocation, itemNeibor)) %>%
+  mutate(n.color = ifelse(Location == itemNeibor, paste("2.",itemNeibor,sep=""), paste("1.",itemLocation,sep="")))
+p1 <-
+  ggplot(neib1, aes(x = as.POSIXct(DateTimeRound), y = SwabCount, color = n.color, linetype = Status)) +
+  geom_line() +
+  coord_cartesian(xlim = c(versionSt, versionEt0)) +
+  scale_color_brewer(palette = "Paired", direction = -1) +
+  theme_minimal() +
+  theme(legend.title=element_blank(),legend.position="top") +
+  xlab("每半小時") +
+  ylab("採樣量")
+
+neib2 <- filter(throughput, Location %in% c(itemLocation,itemNeibor)) %>%
+  mutate(n.color = ifelse(Location == itemNeibor, paste("2.",itemNeibor,sep=""), paste("1.",itemLocation,sep="")))
+# neib2$Location <- factor(Location, levels = c(itemLocation,itemNeibor)) # Reordering group factor levels
+p2 <-
+  ggplot(neib2, aes(x = DateTimeRound, y = SwabPerDesk, group = Location, fill = n.color)) +
+  geom_bar(stat = "identity", alpha = .8) +
+  geom_hline(linetype = "dotted", aes(yintercept = AvgSwabPerDesk), color = "grey") +
+  coord_cartesian(xlim = c(versionSt, versionEt0)) +
+  scale_fill_brewer(palette = "Paired", direction = -1) +
+  facet_wrap(~n.color, ncol = 1) +
+  theme_minimal() +
+  theme(legend.position="none") +
+  xlab("每半小時") + 
+  ylab("吞吐量")
+
+png(paste(itemSno, ".png",sep = ""), width = 280, height = 350, res = 70)
+# png(paste(itemSno, ".png",sep = ""), width = 600, height = 700, res = 100)
+grid.arrange(p1, p2, ncol = 1,
+  top = textGrob(paste("與最鄰近",itemNeibor,"比較"))
+)
+dev.off()
+}
+
+print("Log: step 3 plotting comparison succeeded")
