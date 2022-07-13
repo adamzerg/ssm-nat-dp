@@ -430,7 +430,6 @@ print("Log: step 2 map generated succeeded")
 lonlat <- unique(throughput[, c("Sno","Location","LocationEnglish","lon","lat","area")])
 sp.lonlat <- lonlat
 coordinates(sp.lonlat) <- ~lon+lat
-class(sp.lonlat)
 d <- gDistance(sp.lonlat, byid=T)
 min.d <- apply(d, 1, function(x) order(x, decreasing=F)[2])
 locNeibor <- cbind(lonlat, lonlat[min.d,], apply(d, 1, function(x) sort(x, decreasing=F)[2]))
