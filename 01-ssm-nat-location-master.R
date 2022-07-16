@@ -12,7 +12,7 @@ ggmap_hide_api_key()
 # locationList
 
 # Update version HEREbefore you RUN!!!
-version <- "20220712"
+version <- "20220714"
 locScrpZh <- read_csv(paste("data/location-master/aptmon-location-chinese-",version,".csv", sep = ""), quote="\"")
 locScrpEn <- read_csv(paste("data/location-master/aptmon-location-english-",version,".csv", sep = ""), quote="\"")
 locXlsx <- read_csv(paste("data/location-master/RNA010-location-",version,".csv", sep = ""))
@@ -99,6 +99,9 @@ locMaster.2$lon <- ifelse(locMaster.2$Location == "婦女聯合總會綜合服�
 locMaster.2$lat <- ifelse(locMaster.2$Location == "婦女聯合總會綜合服務大樓",22.20251091087369,locMaster.2$lat)
 locMaster.2$lon <- ifelse(locMaster.2$Location == "聖若瑟教區中學第二校",113.53691916241631,locMaster.2$lon)
 locMaster.2$lat <- ifelse(locMaster.2$Location == "聖若瑟教區中學第二校",22.191105526813402,locMaster.2$lat)
+locMaster.2$lon <- ifelse(locMaster.2$Location == "澳門江門同鄉會頤康活動中心",113.54970354263203,locMaster.2$lon)
+locMaster.2$lat <- ifelse(locMaster.2$Location == "澳門江門同鄉會頤康活動中心",22.205796454474253,locMaster.2$lat)
+
 
 locMaster.2$area <- ifelse(locMaster.2$lat<=22.143,"路環",
                         ifelse(locMaster.2$lat<=22.17,"氹仔",
