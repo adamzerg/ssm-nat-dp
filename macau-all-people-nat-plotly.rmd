@@ -2,7 +2,8 @@
 title: "Macau All People Nucleic Acid Testing Map in Plotly"
 author: "Adam Zheng"
 date: "`r Sys.Date()`"
-output: ioslides_presentation
+output: slidy_presentation
+# output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
