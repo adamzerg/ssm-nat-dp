@@ -217,7 +217,7 @@ for (sheetname in sheets) {
   ### Repeat Location info for number of rows
   dtls <- as.data.table(lls1)
   setnames(dtls, "lls1", "Location")
-  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
+  Location <- dtls[, repeats:=ifelse(grepl("^流動核酸採樣車.*", Location)|grepl("^祐漢街市.*", Location)|grepl("^阿婆井前地.*", Location)|grepl("^白鴿巢公園.*", Location)|grepl("^二龍喉公園.*", Location), nrow(sdf1), nrow(sdf1) * 2)][rep(1:.N,repeats)]
   ### Melt to pivot
   sdf1 <- as.data.frame(sdf1)
   mdf1 <- reshape::melt(sdf1, id = c("SwabDate", "SwabTime"))
